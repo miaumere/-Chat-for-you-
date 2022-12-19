@@ -1,0 +1,15 @@
+@font-face {
+  font-family: "GrapeNuts";
+  src: url("./assets/fonts/grapenuts.ttf") format("truetype");
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "OverpassMonoRegular";
+  src: url("./assets/fonts/overpass-mono-regular.ttf") format("truetype");
+  font-style: normal;
+}
+
+* {
+  font-family: "OverpassMonoRegular", Courier, monospace;
+}
