@@ -1,7 +1,11 @@
 @mixin basic-font {
   font-family: "Slabo";
+  color: var(--font-main-color);
+  font-size: 1rem;
 }
 
 @mixin special-font {
   font-family: "Nunito";
+  color: var(--font-main-color);
+  font-size: 1rem;
 }

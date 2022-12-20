@@ -1,28 +1,26 @@
-<div class="login-container">
-  <div class="title-container">
-    <h1 class="app-title">
-      <span class="app-title--brackets"> &#60;</span>
-      <span class="app-title--main">chat-app </span>
-      <span> <span class="app-title--attribute">for</span> </span>=<span
-        class="app-title--attribute-val"
-        >"you"</span
-      >
-      <span class="app-title--brackets"> /></span>
-    </h1>
-  </div>
-
-  <form [formGroup]="form">
-    <label>
-      nick:
-      <input type="text" formControlName="username" />
-    </label>
-
-    <br />
-
-    <label for="choose-room"> choose room: </label>
-    <select id="choose-room" formControlName="chatRoom">
-      <option>1</option>
-      <option>2</option>
-    </select>
-  </form>
+<div class="title-container">
+  <h1 class="app-title">
+    <span class="app-title--brackets"> &#60;</span>
+    <span class="app-title--main">chat-app </span>
+    <span> <span class="app-title--attribute">for</span> </span>=<span
+      class="app-title--attribute-val"
+      >"you"</span
+    >
+    <span class="app-title--brackets"> /></span>
+  </h1>
 </div>
+
+<form [formGroup]="form" class="select-chat-form">
+  <label>
+    nick:
+    <input type="text" formControlName="username" />
+  </label>
+
+  <br />
+
+  <label for="choose-room"> choose room: </label>
+  <select id="choose-room" formControlName="chatRoom">
+    <option>1</option>
+    <option>2</option>
+  </select>
+</form>

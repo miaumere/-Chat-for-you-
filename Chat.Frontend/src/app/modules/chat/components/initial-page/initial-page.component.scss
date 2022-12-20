@@ -18,17 +18,23 @@
   }
 }
 
-.login-container {
+.title-container {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
 
   background: var(--secondary-color);
-  color: var(--font-main-color);
 
-  font-size: 1rem;
   @include basic-font;
+}
+
+.select-chat-form {
+  @include basic-font;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .title-container {
