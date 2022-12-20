@@ -1,10 +1,17 @@
 @import "./global_styles/reset.scss";
+
+@import "./fonts.scss";
 @import "./global_styles/variables.scss";
 
 body {
   font-size: 62.5%;
+
+  background: var(--main-color);
 }
 
 :root {
-  --main-color: #1e90ff;
+  --main-color: #343541;
+  --secondary-color: #202123;
+  --font-main-color: whitesmoke;
 }
+// motyw light/dark, automatycznie
