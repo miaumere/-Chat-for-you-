@@ -1,0 +1,27 @@
+@import "variables";
+:host {
+  height: 5rem;
+  background: var(--secondary-color);
+
+  @include basic-font;
+  color: var(--font-main-color);
+  font-size: 1.5rem;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.motives-container {
+  display: flex;
+
+  font-size: 1.5rem;
+  margin-left: 1rem;
+}
+
+.year {
+  color: var(--font-second-color);
+  margin-right: 1rem;
+}
