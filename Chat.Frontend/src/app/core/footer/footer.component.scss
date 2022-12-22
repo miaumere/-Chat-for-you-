@@ -7,7 +7,7 @@
 
   height: 5rem;
   background: var(--secondary-color);
-  @include basic-font;
+  font-family: var(--font-basic);
   font-size: 1.5rem;
 }
 

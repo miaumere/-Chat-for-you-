@@ -1,7 +1,7 @@
 @import "variables";
 
 .app-title {
-  font-family: monospace;
+  font-family: var(--font-special);
 
   font-size: 72px;
   &--main {
@@ -20,17 +20,16 @@
 
 .title-container {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: space-between;
+
   flex-direction: column;
 
   background: var(--secondary-color);
-
-  @include basic-font;
 }
 
 .select-chat-form {
-  @include basic-font;
+  font-family: var(--font-basic);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -39,9 +38,4 @@
   height: 100%;
 
   margin-top: 1rem;
-}
-
-.title-container {
-  display: flex;
-  justify-content: space-between;
 }
