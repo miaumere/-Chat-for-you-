@@ -2,12 +2,19 @@ import { InitialPageComponent } from './components/initial-page/initial-page.com
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ChatIndexComponent } from './components/chat-index.component';
+import { ChatRoomComponent } from './components/chat-room/chat-room.component';
 
 const routes: Routes = [
   {
     path: '',
     component: ChatIndexComponent,
-    children: [{ path: '', component: InitialPageComponent }],
+    children: [
+      { path: '', component: InitialPageComponent },
+      {
+        path: ':id',
+        component: ChatRoomComponent,
+      },
+    ],
   },
 ];
 

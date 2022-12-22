@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRouteSnapshot, Router } from '@angular/router';
 
 @Component({
   selector: 'app-initial-page',
@@ -8,7 +9,16 @@ import { FormControl, FormGroup } from '@angular/forms';
 })
 export class InitialPageComponent {
   form = new FormGroup({
-    username: new FormControl(null),
+    username: new FormControl(null, [Validators.required]),
     chatRoom: new FormControl(null),
   });
+  constructor(private _router: Router) {}
+
+  goToChatRoom() {
+    if (!this.form.valid) {
+      console.log('invalid');
+    }
+
+    this._router.navigate(['/', this.form.get('chatRoom')?.value]);
+  }
 }
