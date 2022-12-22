@@ -5,9 +5,18 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FooterComponent } from './core/footer/footer.component';
 
+function initializeApp(): void {}
+
 @NgModule({
   declarations: [AppComponent, FooterComponent],
   imports: [BrowserModule, AppRoutingModule],
   bootstrap: [AppComponent],
+  providers: [
+    {
+      provide: APP_INITIALIZER,
+      useFactory: () => initializeApp,
+      multi: true,
+    },
+  ],
 })
 export class AppModule {}

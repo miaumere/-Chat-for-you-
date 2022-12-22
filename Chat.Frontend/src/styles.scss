@@ -9,11 +9,84 @@ body {
   background: var(--main-color);
 }
 
-:root {
-  --main-color: #343541;
-  --secondary-color: #202123;
-  --font-main-color: whitesmoke;
-  --font-second-color: #c586c0;
+/*#region light theme variables */
+$main-color-light: white;
+$secondary-color-light: whitesmoke;
+$font-main-color-light: #252628;
+$font-second-color-light: #e50000;
+
+$title-element-color-light: #800000;
+$title-attribute-color-light: #e50000;
+$title-attribute-value-color-light: #0000ff;
+$title-bracket-color-light: #800000;
+/*#endregion */
+
+/*#region dark theme variables */
+$main-color-dark: #343541;
+$secondary-color-dark: #202123;
+$font-main-color-dark: whitesmoke;
+$font-second-color-dark: #9cdcfe;
+
+$title-element-color-dark: #569cd6;
+$title-attribute-color-dark: #9cdcfe;
+$title-attribute-value-color-dark: #ce8349;
+$title-bracket-color-dark: grey;
+/*#endregion */
+
+@mixin light {
+  --main-color: #{$main-color-light};
+  --secondary-color: #{$secondary-color-light};
+  --font-main-color: #{$font-main-color-light};
+  --font-second-color: #{$font-second-color-light};
+
+  --title-element-color: #{$title-element-color-light};
+  --title-attribute-color: #{$title-attribute-color-light};
+  --title-attribute-value: #{$title-attribute-value-color-light};
+  --title-bracket-color: #{$title-bracket-color-light};
 }
 
-// motyw light/dark, automatycznie
+@mixin dark {
+  --main-color: #{$main-color-dark};
+  --secondary-color: #{$secondary-color-dark};
+  --font-main-color: #{$font-main-color-dark};
+  --font-second-color: #{$font-second-color-dark};
+
+  --title-element-color: #{$title-element-color-dark};
+  --title-attribute-color: #{$title-attribute-color-dark};
+  --title-attribute-value: #{$title-attribute-value-color-dark};
+  --title-bracket-color: #{$title-bracket-color-dark};
+}
+
+// @media (prefers-color-scheme: light) {
+//   :root {
+//     @include light;
+//   }
+// }
+
+// @media (prefers-color-scheme: dark) {
+//   :root {
+//     @include dark;
+//   }
+// }
+
+:root,
+:root.light {
+  @include light;
+  color-scheme: light;
+}
+:root.dark {
+  @include dark;
+  color-scheme: dark;
+}
+
+:root {
+  accent-color: var(--font-second-color);
+}
+
+input,
+textarea,
+select {
+  @include basic-font;
+  color: var(--font-second-color);
+  outline: none;
+}
