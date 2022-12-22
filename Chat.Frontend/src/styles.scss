@@ -66,10 +66,20 @@ $title-bracket-color-dark: grey;
 :root.light {
   @include light;
   color-scheme: light;
+
+  *::selection {
+    color: #{$font-main-color-dark};
+    background: #{$font-second-color-light};
+  }
 }
 :root.dark {
   @include dark;
   color-scheme: dark;
+
+  *::selection {
+    color: #{$font-main-color-light};
+    background: #{$font-second-color-dark};
+  }
 }
 
 :root {
@@ -92,5 +102,10 @@ textarea,
 select {
   color: var(--font-second-color);
   font-family: var(--font-basic);
+  background: var(--secondary-color);
+
   outline: none;
+  border: none;
+
+  border-radius: 3px;
 }
