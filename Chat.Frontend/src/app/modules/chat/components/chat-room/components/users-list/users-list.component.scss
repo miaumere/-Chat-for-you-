@@ -1,0 +1,22 @@
+.users-list-panel {
+  font-size: 0.8rem;
+
+  background: var(--secondary-color);
+}
+
+$img-size: 25px;
+.profile-pic {
+  height: $img-size;
+  width: $img-size;
+}
+
+.username {
+  color: var(--font-second-color);
+  margin-left: 0.5rem;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}

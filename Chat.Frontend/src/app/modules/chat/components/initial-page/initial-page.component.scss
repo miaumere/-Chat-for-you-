@@ -60,4 +60,7 @@
 
 .go-button {
   margin-top: 1.5rem;
+  :hover {
+    color: var(--font-second-color);
+  }
 }
