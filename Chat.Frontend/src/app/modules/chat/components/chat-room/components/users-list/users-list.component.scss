@@ -2,6 +2,12 @@
   font-size: 0.8rem;
 
   background: var(--secondary-color);
+
+  &__title {
+    color: var(--font-second-color);
+    font-size: 1rem;
+    font-family: var(--special-font);
+  }
 }
 
 $img-size: 25px;
@@ -11,7 +17,6 @@ $img-size: 25px;
 }
 
 .username {
-  color: var(--font-second-color);
   margin-left: 0.5rem;
 }
 

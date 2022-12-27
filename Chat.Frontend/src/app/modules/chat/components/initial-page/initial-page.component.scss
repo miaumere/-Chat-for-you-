@@ -16,6 +16,7 @@
   }
   &--brackets {
     color: var(--title-bracket-color);
+    letter-spacing: 0.2rem;
   }
 }
 
@@ -29,7 +30,7 @@
   background: var(--secondary-color);
 }
 
-.select-chat-form {
+.initial-page-container {
   font-family: var(--font-basic);
   display: flex;
   justify-content: center;
@@ -58,9 +59,15 @@
   }
 }
 
-.go-button {
-  margin-top: 1.5rem;
-  :hover {
+.button {
+  &--go {
+    margin-top: 1.5rem;
+  }
+  &--create-new-room {
+    margin-top: 1rem;
+  }
+
+  &:hover {
     color: var(--font-second-color);
   }
 }

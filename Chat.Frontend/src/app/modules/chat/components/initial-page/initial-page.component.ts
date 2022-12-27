@@ -12,6 +12,8 @@ export class InitialPageComponent {
     username: new FormControl(null, [Validators.required]),
     chatRoom: new FormControl(null),
   });
+
+  isNewRoomFormVisible = false;
   constructor(private _router: Router) {}
 
   goToChatRoom() {
@@ -21,4 +23,6 @@ export class InitialPageComponent {
 
     this._router.navigate(['/', this.form.get('chatRoom')?.value]);
   }
+
+  showNewRoomForm() {}
 }
