@@ -8,15 +8,15 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<ApiDbContext>(options =>
         options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
 
-
 builder.Services.AddScoped<ExampleService>();
+builder.Services.AddScoped<ChatService>();
 
 
 var app = builder.Build();
@@ -32,9 +32,7 @@ if (app.Environment.IsDevelopment())
 #endif
 
 
-//app.UseStaticFiles();
 app.UseAuthorization();
 app.MapControllers();
-//app.MapFallbackToFile("index.html");
 
 app.Run();

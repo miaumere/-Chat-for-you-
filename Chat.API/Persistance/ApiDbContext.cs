@@ -6,6 +6,7 @@ namespace Chat.API.Persistance
     {
         public DbSet<Blog> Blogs { get; set; }
         public DbSet<Post> Posts { get; set; }
+        public DbSet<Room> Rooms { get; set; }
 
         public ApiDbContext(DbContextOptions<ApiDbContext> options) : base(options) {}
     }

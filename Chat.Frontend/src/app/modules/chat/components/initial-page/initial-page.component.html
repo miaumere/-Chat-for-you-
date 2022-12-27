@@ -22,12 +22,18 @@
     <label for="choose-room">
       choose room:
       <select id="choose-room" formControlName="chatRoom">
-        <option>1</option>
-        <option>2</option>
+        <option [value]="null">---</option>
+        <option *ngFor="let room of availableRooms" [value]="room.id">
+          {{ room.name }}
+        </option>
       </select></label
     >
   </form>
-  <button (click)="goToChatRoom()" class="button button--go">
+  <button
+    (click)="goToChatRoom()"
+    class="button button--go"
+    [disabled]="!form.valid"
+  >
     💬 ok, let's chat!
   </button>
   <br />
@@ -41,7 +47,7 @@
     ➕ create new room
   </button>
 
-  <form *ngIf="isNewRoomFormVisible">
+  <form *ngIf="isNewRoomFormVisible" [formGroup]="createNewForm">
     <label>
       new room name:
       <input type="text" formControlName="username" />

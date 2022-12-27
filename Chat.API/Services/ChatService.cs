@@ -1,15 +1,15 @@
 ﻿using Chat.API.Models;
 using Chat.API.Persistance;
 using Microsoft.EntityFrameworkCore;
+using Room = Chat.API.Models.Room;
 
 namespace Chat.API.Services
 {
-    public class ExampleService
+    public class ChatService
     {
         private ApiDbContext _apiDbContext { get; init; }
-
-
-        public ExampleService(ApiDbContext apiDbContext)
+  
+        public ChatService(ApiDbContext apiDbContext)
         {
             _apiDbContext = apiDbContext;
         }
@@ -36,5 +36,17 @@ namespace Chat.API.Services
             return true;
         }
 
+        public async Task<List<Room>> GetRooms()
+        {
+            var rooms = new List<Room>();
+
+            var roomsFromDb = await _apiDbContext.Rooms.ToListAsync();
+
+            foreach (var roomFromDb in roomsFromDb)
+            {
+                rooms.Add(new Room(roomFromDb));
+            }
+            return rooms;
+        }
     }
 }
