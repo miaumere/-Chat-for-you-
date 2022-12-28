@@ -48,5 +48,30 @@ namespace Chat.API.Services
             }
             return rooms;
         }
+
+        
+
+         public async Task<bool> AddNewRoom()
+        {
+            var blog = new Blog()
+            {
+                Url = "url",
+            };
+
+            var post = new Post()
+            {
+                Title = "title",
+                Content = "TEST",
+                Blog = blog
+            };
+
+            _apiDbContext.Update(post);
+
+
+            await _apiDbContext.SaveChangesAsync();
+
+            return true;
+        }
+
     }
 }

@@ -1,0 +1,16 @@
+.button {
+  &[disabled] {
+    color: grey;
+    pointer-events: none;
+  }
+  &--go {
+    margin-top: 1.5rem;
+  }
+  &--create-new-room {
+    margin-top: 1rem;
+  }
+
+  &:hover {
+    color: var(--font-second-color);
+  }
+}
