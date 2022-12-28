@@ -14,28 +14,7 @@ namespace Chat.API.Services
             _apiDbContext = apiDbContext;
         }
 
-        public async Task<bool> HandleAsync()
-        {
-            var blog = new Blog()
-            {
-                Url = "url",
-            };
-
-            var post = new Post()
-            {
-                Title = "title",
-                Content = "TEST",
-                Blog = blog
-            };
-
-            _apiDbContext.Update(post);
-
-
-            await _apiDbContext.SaveChangesAsync();
-
-            return true;
-        }
-
+ 
         public async Task<List<Room>> GetRooms()
         {
             var rooms = new List<Room>();
@@ -49,26 +28,20 @@ namespace Chat.API.Services
             return rooms;
         }
 
-        
 
          public async Task<bool> AddNewRoom()
         {
-            var blog = new Blog()
+            // TODO
+/*            var blog = new Blog()
             {
                 Url = "url",
             };
 
-            var post = new Post()
-            {
-                Title = "title",
-                Content = "TEST",
-                Blog = blog
-            };
 
             _apiDbContext.Update(post);
 
 
-            await _apiDbContext.SaveChangesAsync();
+            await _apiDbContext.SaveChangesAsync();*/
 
             return true;
         }

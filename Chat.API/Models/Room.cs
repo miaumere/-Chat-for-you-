@@ -10,7 +10,7 @@
         {
             Id = roomFromDb.Id;
             Name = roomFromDb.Name;
-            Author = roomFromDb.Author;
+            Author = roomFromDb.CreatedBy.Name;
         }
     }
 }

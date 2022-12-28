@@ -15,7 +15,6 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApiDbContext>(options =>
         options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
 
-builder.Services.AddScoped<ExampleService>();
 builder.Services.AddScoped<ChatService>();
 
 

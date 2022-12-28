@@ -2,10 +2,10 @@
 
 namespace Chat.API.Persistance
 {
-    public class Room
+    public class User
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public User CreatedBy { get; set; }
+        public string Password { get; set; }
     }
 }
