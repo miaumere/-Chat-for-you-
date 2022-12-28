@@ -119,3 +119,9 @@ select {
     pointer-events: none;
   }
 }
+
+$img-size: 25px;
+.profile-pic {
+  height: $img-size;
+  width: $img-size;
+}

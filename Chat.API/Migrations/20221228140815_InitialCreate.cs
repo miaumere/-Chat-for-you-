@@ -6,59 +6,59 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Chat.API.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Blogs",
+                name: "Users",
                 columns: table => new
                 {
-                    BlogId = table.Column<int>(type: "integer", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Url = table.Column<string>(type: "text", nullable: false)
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Password = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Blogs", x => x.BlogId);
+                    table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Posts",
+                name: "Rooms",
                 columns: table => new
                 {
-                    PostId = table.Column<int>(type: "integer", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Title = table.Column<string>(type: "text", nullable: false),
-                    Content = table.Column<string>(type: "text", nullable: false),
-                    BlogId = table.Column<int>(type: "integer", nullable: false)
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    CreatedById = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Posts", x => x.PostId);
+                    table.PrimaryKey("PK_Rooms", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Posts_Blogs_BlogId",
-                        column: x => x.BlogId,
-                        principalTable: "Blogs",
-                        principalColumn: "BlogId",
+                        name: "FK_Rooms_Users_CreatedById",
+                        column: x => x.CreatedById,
+                        principalTable: "Users",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Posts_BlogId",
-                table: "Posts",
-                column: "BlogId");
+                name: "IX_Rooms_CreatedById",
+                table: "Rooms",
+                column: "CreatedById");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Posts");
+                name: "Rooms");
 
             migrationBuilder.DropTable(
-                name: "Blogs");
+                name: "Users");
         }
     }
 }

@@ -66,7 +66,7 @@ export class LoginPageComponent extends BaseComponent implements OnInit {
 
   createNewUser(): void {
     if (
-      this.newUserForm.value.password === this.newUserForm.value.retryPassword
+      this.newUserForm.value.password !== this.newUserForm.value.retryPassword
     ) {
       this.passwordsError = true;
       return;
@@ -76,6 +76,8 @@ export class LoginPageComponent extends BaseComponent implements OnInit {
       !this.newUserForm.value.username ||
       !this.newUserForm.value.password
     ) {
+      this.loginError = true;
+
       return;
     }
     this.passwordsError = false;
@@ -87,7 +89,7 @@ export class LoginPageComponent extends BaseComponent implements OnInit {
     };
 
     this.subscriptions$.add(
-      this._authService.login(request).subscribe({
+      this._authService.register(request).subscribe({
         next: () => {
           this._router.navigate(['./chat']);
         },

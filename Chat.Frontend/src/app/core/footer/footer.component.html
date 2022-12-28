@@ -5,5 +5,18 @@
     <button (click)="setTheme('light')">☀️</button>
     <button (click)="setTheme('dark')">🌚</button>
   </div>
-  <p class="year">{{ date | date : "yyyy" }}</p>
+  <div class="user-info">
+    <img
+      *ngIf="_authService.user$ | async"
+      class="profile-pic"
+      [src]="
+        'https://avatars.dicebear.com/api/initials/' +
+        (_authService.user$ | async)?.username +
+        '.svg'
+      "
+    />
+    <span class="username">{{
+      (_authService.user$ | async)?.username ?? "not logged in"
+    }}</span>
+  </div>
 </footer>

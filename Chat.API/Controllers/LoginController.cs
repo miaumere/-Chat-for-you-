@@ -11,18 +11,19 @@ namespace Chat.API.Controllers
     [Route("api/[controller]")]
     public class LoginController : ControllerBase
     {
-        private ChatService _chatService { get; init; }
+        private LoginService _loginService { get; init; }
 
-        public LoginController(ChatService chatService)
+
+        public LoginController(LoginService loginService)
         {
-            _chatService = chatService;
+            _loginService = loginService;
         }
 
 
-        [HttpPost, Route("")]
-        public async Task<List<Models.Room>> AddNewRoom()
+        [HttpPost, Route("registrate")]
+        public async Task<LoginResponse?> Registrate([FromBody] UserRequest request)
         {
-            return await _chatService.GetRooms();
+            return await _loginService.Registrate(request);
         }
     }
 }

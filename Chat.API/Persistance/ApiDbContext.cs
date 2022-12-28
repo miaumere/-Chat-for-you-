@@ -9,6 +9,4 @@ namespace Chat.API.Persistance
 
         public ApiDbContext(DbContextOptions<ApiDbContext> options) : base(options) {}
     }
-
-
 }

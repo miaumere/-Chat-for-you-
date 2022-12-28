@@ -30,7 +30,20 @@ export class AuthService {
     this._userSubject$.next(user);
   }
 
-  register(username: string, password: string) {}
+  register(request: ILoginRequest) {
+    return this.http
+      .post<{ token: string; user: User }>(
+        `${this._baseUrl}/registrate`,
+        request
+      )
+      .pipe(
+        tap((res: { token: string; user: User }) => {
+          console.log('res: ', res);
+          this.setUser(res.user);
+          this.setAccessToken(res.token);
+        })
+      );
+  }
 
   setAccessToken(token: string): void {
     localStorage.setItem(this._tokenName, token);

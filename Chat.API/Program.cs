@@ -16,7 +16,7 @@ builder.Services.AddDbContext<ApiDbContext>(options =>
         options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
 
 builder.Services.AddScoped<ChatService>();
-
+builder.Services.AddScoped<LoginService>();
 
 var app = builder.Build();
 

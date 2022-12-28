@@ -1,4 +1,6 @@
+import { AuthService } from 'src/app/core/services/auth/auth.service';
 import { Component, OnInit } from '@angular/core';
+import { User } from '../services/models/user.model';
 
 type themeType = 'light' | 'dark';
 @Component({
@@ -7,8 +9,7 @@ type themeType = 'light' | 'dark';
   styleUrls: ['./footer.component.scss'],
 })
 export class FooterComponent implements OnInit {
-  readonly date = new Date();
-
+  constructor(public _authService: AuthService) {}
   ngOnInit(): void {
     this.getTheme();
   }

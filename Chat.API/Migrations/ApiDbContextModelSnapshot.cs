@@ -21,49 +21,6 @@ namespace Chat.API.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Chat.API.Persistance.Blog", b =>
-                {
-                    b.Property<int>("BlogId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("BlogId"));
-
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("BlogId");
-
-                    b.ToTable("Blogs");
-                });
-
-            modelBuilder.Entity("Chat.API.Persistance.Post", b =>
-                {
-                    b.Property<int>("PostId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("PostId"));
-
-                    b.Property<int>("BlogId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("PostId");
-
-                    b.HasIndex("BlogId");
-
-                    b.ToTable("Posts");
-                });
-
             modelBuilder.Entity("Chat.API.Persistance.Room", b =>
                 {
                     b.Property<int>("Id")
@@ -72,9 +29,8 @@ namespace Chat.API.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Author")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("CreatedById")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -82,23 +38,41 @@ namespace Chat.API.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CreatedById");
+
                     b.ToTable("Rooms");
                 });
 
-            modelBuilder.Entity("Chat.API.Persistance.Post", b =>
+            modelBuilder.Entity("Chat.API.Persistance.User", b =>
                 {
-                    b.HasOne("Chat.API.Persistance.Blog", "Blog")
-                        .WithMany("Posts")
-                        .HasForeignKey("BlogId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Chat.API.Persistance.Room", b =>
+                {
+                    b.HasOne("Chat.API.Persistance.User", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Blog");
-                });
-
-            modelBuilder.Entity("Chat.API.Persistance.Blog", b =>
-                {
-                    b.Navigation("Posts");
+                    b.Navigation("CreatedBy");
                 });
 #pragma warning restore 612, 618
         }
