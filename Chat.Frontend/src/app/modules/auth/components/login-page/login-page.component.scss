@@ -1,35 +1,5 @@
 @import "variables";
 
-.app-title {
-  margin: 5rem;
-
-  font-family: var(--font-special);
-  font-size: 48px;
-  &--main {
-    color: var(--title-element-color);
-  }
-  &--attribute-val {
-    color: var(--title-attribute-value);
-  }
-  &--attribute {
-    color: var(--title-attribute-color);
-  }
-  &--brackets {
-    color: var(--title-bracket-color);
-    letter-spacing: 0.2rem;
-  }
-}
-
-.title-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  flex-direction: column;
-
-  background: var(--secondary-color);
-}
-
 .initial-page-container {
   font-family: var(--font-basic);
   display: flex;

@@ -5,6 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FooterComponent } from './core/footer/footer.component';
 import { AuthGuard } from './core/services/auth/auth-guard.service';
+import { HeaderComponent } from './core/header/header.component';
 
 function initializeApp(): void {}
 
