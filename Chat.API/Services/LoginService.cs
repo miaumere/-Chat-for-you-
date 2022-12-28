@@ -45,9 +45,7 @@ namespace Chat.API.Services
         {
             var userEntity = new User() { Name = request.Username };
 
-            var secretKey = _configuration.GetValue<string>("SecretKey");
-
-            if (_apiDbContext.Users.ToList().Where(x => x.Name == request.Username).Any())
+            if (_apiDbContext.Users.Where(x => x.Name == request.Username).Any())
             {
                 throw new Exception("User of this username exists");
             }

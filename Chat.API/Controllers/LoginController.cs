@@ -19,6 +19,12 @@ namespace Chat.API.Controllers
             _loginService = loginService;
         }
 
+        [HttpPost, Route("")]
+        public async Task<LoginResponse?> Login([FromBody] UserRequest request)
+        {
+            return await _loginService.Login(request);
+        }
+
 
         [HttpPost, Route("registrate")]
         public async Task<LoginResponse?> Registrate([FromBody] UserRequest request)

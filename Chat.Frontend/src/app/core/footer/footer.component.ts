@@ -1,3 +1,4 @@
+import { BaseComponent } from 'src/app/core/base.component';
 import { AuthService } from 'src/app/core/services/auth/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { User } from '../services/models/user.model';
@@ -10,9 +11,12 @@ type themeType = 'light' | 'dark';
 })
 export class FooterComponent implements OnInit {
   constructor(public _authService: AuthService) {}
+
   ngOnInit(): void {
     this.getTheme();
   }
+
+  ngAfterViewInit(): void {}
 
   getTheme() {
     if (!localStorage.getItem('theme')) {

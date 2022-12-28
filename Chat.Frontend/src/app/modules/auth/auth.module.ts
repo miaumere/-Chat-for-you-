@@ -17,6 +17,5 @@ import { AuthService } from 'src/app/core/services/auth/auth.service';
     HeaderComponent,
     SharedModule,
   ],
-  providers: [AuthService],
 })
 export class AuthModule {}

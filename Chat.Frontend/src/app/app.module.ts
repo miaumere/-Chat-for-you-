@@ -6,9 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FooterComponent } from './core/footer/footer.component';
 import { AuthGuard } from './core/services/auth/auth-guard.service';
-import { HeaderComponent } from './core/header/header.component';
-import { ErrorDirective } from './modules/shared/directives/error.directive';
-import { AuthService } from './core/services/auth/auth.service';
+
 import { HttpClientModule } from '@angular/common/http';
 
 function initializeApp(): void {}
@@ -24,7 +22,6 @@ function initializeApp(): void {}
       multi: true,
     },
     AuthGuard,
-    AuthService,
   ],
 })
 export class AppModule {}

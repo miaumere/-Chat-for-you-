@@ -10,8 +10,7 @@ export class AuthService {
   private _tokenName = 'access_token';
   private _baseUrl = '/api/Login';
 
-  private _userSubject$ = new BehaviorSubject<User | null>(null);
-  user$ = this._userSubject$.asObservable();
+  public user$ = new BehaviorSubject<User | null>(null);
 
   constructor(private http: HttpClient) {}
 
@@ -20,14 +19,13 @@ export class AuthService {
       .post<{ token: string; user: User }>(this._baseUrl, request)
       .pipe(
         tap((res: { token: string; user: User }) => {
-          console.log('res: ', res);
-          this.setAccessToken(res.token);
+          console.log('res: ', this);
+
+          this.user$.next(res.user);
+          // this.setAccessToken(res.token);
+          // this.user$.next(res.user);
         })
       );
-  }
-
-  setUser(user: User) {
-    this._userSubject$.next(user);
   }
 
   register(request: ILoginRequest) {
@@ -39,7 +37,7 @@ export class AuthService {
       .pipe(
         tap((res: { token: string; user: User }) => {
           console.log('res: ', res);
-          this.setUser(res.user);
+          this.user$.next(res.user);
           this.setAccessToken(res.token);
         })
       );
