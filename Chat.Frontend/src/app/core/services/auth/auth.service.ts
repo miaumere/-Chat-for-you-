@@ -19,8 +19,6 @@ export class AuthService {
       .post<{ token: string; user: User }>(this._baseUrl, request)
       .pipe(
         tap((res: { token: string; user: User }) => {
-          console.log('res: ', this);
-
           this.user$.next(res.user);
           this.setAccessToken(res.token);
         })
@@ -35,7 +33,6 @@ export class AuthService {
       )
       .pipe(
         tap((res: { token: string; user: User }) => {
-          console.log('res: ', res);
           this.user$.next(res.user);
           this.setAccessToken(res.token);
         })

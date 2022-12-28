@@ -2,7 +2,9 @@
 using Chat.API.Persistance;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using User = Chat.API.Persistance.User;
@@ -36,19 +38,19 @@ namespace Chat.API.Services
 
             var response = new LoginResponse();
             response.user = userResponse;
-            response.token = GenerateJWTTokenForUser();
+            response.token = GenerateJWTTokenForUser(userEntity);
 
             return response;
         }
 
         public async Task<LoginResponse?> Registrate(UserRequest request)
         {
-            var userEntity = new User() { Name = request.Username };
-
             if (_apiDbContext.Users.Where(x => x.Name == request.Username).Any())
             {
                 throw new Exception("User of this username exists");
-            }
+            }            
+            var userEntity = new User() { Name = request.Username };
+
             userEntity.Password = HashPassword(request.Password);
 
             _apiDbContext.Users.Add(userEntity);
@@ -58,7 +60,7 @@ namespace Chat.API.Services
             var response = new LoginResponse();            
             var userResponse = new Models.User(userEntity);
             response.user = userResponse;
-            response.token = GenerateJWTTokenForUser();
+            response.token = GenerateJWTTokenForUser(userEntity);
 
             return response;
         }
@@ -72,12 +74,22 @@ namespace Chat.API.Services
             return Convert.ToHexString(secretHash);
         }
 
-        public string GenerateJWTTokenForUser()
+        public string GenerateJWTTokenForUser(User user)
         {
             var secretKey = _configuration.GetValue<string>("SecretKey");
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(secretKey);
 
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()), new Claim("username", user.Name) }),
+                Expires = DateTime.UtcNow.AddDays(7),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
 
-            return "";
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+
+            return tokenHandler.WriteToken(token);
         }
 
 
