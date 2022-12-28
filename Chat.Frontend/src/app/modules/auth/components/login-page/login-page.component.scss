@@ -1,13 +1,11 @@
 @import "variables";
 
-.initial-page-container {
+.container {
   font-family: var(--font-basic);
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-
-  height: 100%;
 
   margin-top: 1rem;
   font-size: 1rem;
@@ -30,10 +28,6 @@
 }
 
 .button {
-  &[disabled] {
-    color: grey;
-    pointer-events: none;
-  }
   &--go {
     margin-top: 1.5rem;
   }
@@ -44,4 +38,8 @@
   &:hover {
     color: var(--font-second-color);
   }
+}
+
+.error-message {
+  margin: 0.5rem;
 }

@@ -1,3 +1,4 @@
+import { HeaderComponent } from 'src/app/core/header/header.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -23,6 +24,7 @@ import { ChooseRoomComponent } from './components/choose-room/choose-room.compon
     ReactiveFormsModule,
     ChatRoutingModule,
     HttpClientModule,
+    HeaderComponent,
   ],
   providers: [ChatService],
 })

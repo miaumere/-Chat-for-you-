@@ -1,6 +1,6 @@
 <app-header></app-header>
 
-<div class="initial-page-container">
+<div class="container">
   <form [formGroup]="form">
     <label>
       username:
@@ -12,44 +12,51 @@
       password:
       <input type="password" formControlName="password" />
     </label>
-
-    <br />
-
-    <label for="choose-room">
-      choose room:
-      <select id="choose-room" formControlName="chatRoom">
-        <option [value]="null">---</option>
-        <option *ngFor="let room of availableRooms" [value]="room.id">
-          {{ room.name }}
-        </option>
-      </select></label
-    >
   </form>
-  <button
-    (click)="goToChatRoom()"
-    class="button button--go"
-    [disabled]="!form.valid"
-  >
-    💬 ok, let's chat!
-  </button>
-  <br />
-  or
-  <br />
-  <button
-    (click)="isNewRoomFormVisible = true"
-    *ngIf="!isNewRoomFormVisible"
-    class="button button--create-new-room"
-  >
-    ➕ create new room
-  </button>
+  <div appError *ngIf="loginError" class="error-message">
+    error has occured!
+  </div>
 
-  <form *ngIf="isNewRoomFormVisible" [formGroup]="createNewForm">
+  <button class="button button--go" [disabled]="!form.valid" (click)="login()">
+    🔑 login
+  </button>
+  <br />
+  or create new user
+  <br />
+
+  <form [formGroup]="newUserForm">
     <label>
-      new room name:
-      <input type="text" formControlName="username" />
+      username:
+      <input
+        type="text"
+        formControlName="username"
+        autocomplete="new-password"
+      />
+    </label>
+
+    <div appError *ngIf="passwordsError" class="error-message">
+      error: passwords aren't the same!
+    </div>
+    <label>
+      password:
+      <input
+        type="password"
+        id="inputId"
+        formControlName="password"
+        autocomplete="new-password"
+      />
+    </label>
+
+    <label>
+      re-type password:
+      <input type="password" formControlName="retryPassword" />
     </label>
   </form>
-  <button class="button button--create-new-room" *ngIf="isNewRoomFormVisible">
-    ➕ 💬 create and join
+  <button
+    class="button button--create-new-room"
+    [disabled]="!newUserForm.valid"
+    (click)="createNewUser()"
+  >
+    🔐 register
   </button>
 </div>

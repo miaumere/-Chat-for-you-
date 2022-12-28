@@ -2,6 +2,8 @@
 @import "./fonts.scss";
 @import "./global_styles/variables.scss";
 
+$error-color: tomato;
+
 /*#region light theme variables */
 $main-color-light: white;
 $secondary-color-light: whitesmoke;
@@ -87,6 +89,7 @@ $title-bracket-color-dark: grey;
 
   --font-basic: "Cascadia Code Regular";
   --font-special: "Cascadia Code Regular";
+  --error-color: #{$error-color};
 }
 
 body {
@@ -108,4 +111,11 @@ select {
   border: none;
 
   border-radius: 3px;
+}
+
+.button {
+  &[disabled] {
+    color: grey;
+    pointer-events: none;
+  }
 }
