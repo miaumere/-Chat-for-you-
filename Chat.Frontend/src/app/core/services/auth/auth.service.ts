@@ -22,8 +22,7 @@ export class AuthService {
           console.log('res: ', this);
 
           this.user$.next(res.user);
-          // this.setAccessToken(res.token);
-          // this.user$.next(res.user);
+          this.setAccessToken(res.token);
         })
       );
   }

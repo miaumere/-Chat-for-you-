@@ -55,7 +55,7 @@ export class LoginPageComponent extends BaseComponent implements OnInit {
     this.subscriptions$.add(
       this._authService.login(request).subscribe({
         next: () => {
-          this._router.navigate(['./chat']);
+          this._router.navigate(['/chat']);
         },
         error: () => {
           this.loginError = true;
@@ -91,7 +91,7 @@ export class LoginPageComponent extends BaseComponent implements OnInit {
     this.subscriptions$.add(
       this._authService.register(request).subscribe({
         next: () => {
-          this._router.navigate(['./chat']);
+          this._router.navigate(['/chat']);
         },
         error: () => {
           this.loginError = true;
