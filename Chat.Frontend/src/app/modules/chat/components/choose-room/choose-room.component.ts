@@ -12,8 +12,6 @@ import { Room } from 'src/app/core/services/models/room.model';
 })
 export class ChooseRoomComponent extends BaseComponent implements OnInit {
   form = new FormGroup({
-    username: new FormControl(null, [Validators.required]),
-    password: new FormControl(null, [Validators.required]),
     chatRoom: new FormControl(null, [Validators.required]),
   });
 

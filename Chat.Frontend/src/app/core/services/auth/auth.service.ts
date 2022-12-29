@@ -7,7 +7,6 @@ import { User } from '../models/user.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private _tokenName = 'access_token';
   private _baseUrl = '/api/Login';
 
   public user$ = new BehaviorSubject<User | null>(null);
@@ -20,7 +19,6 @@ export class AuthService {
       .pipe(
         tap((res: { token: string; user: User }) => {
           this.user$.next(res.user);
-          this.setAccessToken(res.token);
         })
       );
   }
@@ -34,24 +32,11 @@ export class AuthService {
       .pipe(
         tap((res: { token: string; user: User }) => {
           this.user$.next(res.user);
-          this.setAccessToken(res.token);
         })
       );
   }
 
-  setAccessToken(token: string): void {
-    localStorage.setItem(this._tokenName, token);
-  }
-
-  getAccessToken(): string | null {
-    return localStorage.getItem(this._tokenName);
-  }
-
-  isAuthenticated(): boolean {
-    return !!this.getAccessToken();
-  }
-
   logout(): void {
-    localStorage.removeItem(this._tokenName);
+    this.user$.next(null);
   }
 }

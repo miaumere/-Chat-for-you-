@@ -18,6 +18,8 @@ builder.Services.AddDbContext<ApiDbContext>(options =>
 builder.Services.AddScoped<ChatService>();
 builder.Services.AddScoped<LoginService>();
 
+builder.Services.AddHttpContextAccessor();
+
 var app = builder.Build();
 
 

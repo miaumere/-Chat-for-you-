@@ -4,6 +4,10 @@ using Chat.API.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
+using User = Chat.API.Models.User;
+using Microsoft.AspNetCore.Http;
+using static System.Net.WebRequestMethods;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Chat.API.Controllers
 {
@@ -20,14 +24,13 @@ namespace Chat.API.Controllers
         }
 
         [HttpPost, Route("")]
-        public async Task<LoginResponse?> Login([FromBody] UserRequest request)
+        public async Task<User> Login([FromBody] UserRequest request)
         {
-            return await _loginService.Login(request);
+                return await _loginService.Login(request);
         }
 
-
         [HttpPost, Route("registrate")]
-        public async Task<LoginResponse?> Registrate([FromBody] UserRequest request)
+        public async Task<User?> Registrate([FromBody] UserRequest request)
         {
             return await _loginService.Registrate(request);
         }
