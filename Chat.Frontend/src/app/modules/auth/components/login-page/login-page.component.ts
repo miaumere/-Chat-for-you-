@@ -52,12 +52,16 @@ export class LoginPageComponent extends BaseComponent implements OnInit {
       username: this.form.value.username,
       password: this.form.value.password,
     };
+    console.log('xxx');
     this.subscriptions$.add(
       this._authService.login(request).subscribe({
-        next: () => {
+        next: (t) => {
+          console.log(t);
           this._router.navigate(['/chat']);
         },
-        error: () => {
+        error: (e) => {
+          console.log(e);
+
           this.loginError = true;
         },
       })

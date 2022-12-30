@@ -1,7 +1,6 @@
 import { BaseComponent } from 'src/app/core/base.component';
 import { AuthService } from 'src/app/core/services/auth/auth.service';
 import { Component, OnInit } from '@angular/core';
-import { User } from '../services/models/user.model';
 
 type themeType = 'light' | 'dark';
 @Component({
@@ -9,17 +8,18 @@ type themeType = 'light' | 'dark';
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss'],
 })
-export class FooterComponent implements OnInit {
-  constructor(public _authService: AuthService) {}
+export class FooterComponent extends BaseComponent implements OnInit {
+  private readonly _themeStorageItemName = 'theme';
+  constructor(public _authService: AuthService) {
+    super();
+  }
 
   ngOnInit(): void {
     this.getTheme();
   }
 
-  ngAfterViewInit(): void {}
-
   getTheme() {
-    if (!localStorage.getItem('theme')) {
+    if (!localStorage.getItem(this._themeStorageItemName)) {
       const isThemeDarkFromMedia = window.matchMedia(
         '(prefers-color-scheme: dark)'
       ).matches;
@@ -28,13 +28,17 @@ export class FooterComponent implements OnInit {
         : 'light';
     } else {
       document.documentElement.className = localStorage.getItem(
-        'theme'
+        this._themeStorageItemName
       ) as themeType;
     }
   }
 
   setTheme(theme: themeType) {
-    localStorage.setItem('theme', theme);
+    localStorage.setItem(this._themeStorageItemName, theme);
     this.getTheme();
+  }
+
+  logout() {
+    this._authService.logout();
   }
 }

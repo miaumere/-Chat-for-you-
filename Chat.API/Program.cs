@@ -27,10 +27,7 @@ builder.Services.AddDbContext<ApiDbContext>(options =>
 builder.Services.AddScoped<ChatService>();
 builder.Services.AddScoped<LoginService>();
 
-
-
 builder.Services.AddHttpContextAccessor();
-
 
 
 var secretKey = builder.Configuration.GetValue<string>("SecretKey");
@@ -73,27 +70,5 @@ app.UseAuthorization();
 app.UseAuthentication();
 
 app.MapControllers();
-
-
-
-app.Use(async (context, next) =>
-{
-    var token = context.Request.Cookies["token"];
-
-
-    var name = context.User?.Identity?.Name;
-    Console.WriteLine($"Name: {name}");
-
-    var handler = new JwtSecurityTokenHandler();
-    var DecodedJWT = handler.ReadJwtToken(token);
-
-    //DecodedJWT.Claims["id"]
-
-    string payload = DecodedJWT.EncodedPayload;  // Gives Payload
-    //return Encoding.UTF8.GetString(FromBase64Url(payload));
-
-    await next(context);
-});
-
 
 app.Run();

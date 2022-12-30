@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
@@ -34,7 +35,7 @@ namespace Chat.API.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<Models.User> Login(UserRequest request)
+        public async Task<string> Login(UserRequest request)
         {
             var userEntity = await
                 _apiDbContext.Users
@@ -48,19 +49,12 @@ namespace Chat.API.Services
 
             var token = CreateCookieWithJWTTokenForUser(userEntity);
 
+            var userResponse = new UserDto(userEntity, token);
 
-            var userResponse = new Models.User(userEntity, token);
-
-            ////read cookie from IHttpContextAccessor  
-            // string cookieValueFromContext = _httpContextAccessor.HttpContext.Request.Cookies["key"];
-
-
-
-
-            return userResponse;
+            return token;
         }
 
-        public async Task<Models.User> Registrate(UserRequest request)
+        public async Task<string> Registrate(UserRequest request)
         {
             if (_apiDbContext.Users.Where(x => x.Name == request.Username).Any())
             {
@@ -74,9 +68,9 @@ namespace Chat.API.Services
             await _apiDbContext.SaveChangesAsync();
 
             var token = CreateCookieWithJWTTokenForUser(userEntity);
-            var userResponse = new Models.User(userEntity, token);
+            var userResponse = new UserDto(userEntity, token);
 
-            return userResponse;
+            return token;
         }
 
         private string HashPassword(string secret)
@@ -98,7 +92,7 @@ namespace Chat.API.Services
             {
                 Subject = new ClaimsIdentity(new[] {
                     new Claim(ClaimTypes.Name, user.Id.ToString()),
-                    new Claim(ClaimTypes.NameIdentifier, user.Name.ToString()),
+                    new Claim("Username", user.Name),
                     }
                 ),
                 Expires = DateTime.UtcNow.AddDays(7),
@@ -106,7 +100,7 @@ namespace Chat.API.Services
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
-
+        
             return tokenHandler.WriteToken(token);
         }
 
