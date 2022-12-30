@@ -1,5 +1,7 @@
 ﻿using Chat.API.Models;
 using Chat.API.Persistance;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -44,12 +46,16 @@ namespace Chat.API.Services
                 throw new Exception("User does not exist!");
             }
 
-            var userResponse = new Models.User(userEntity);
+            var token = CreateCookieWithJWTTokenForUser(userEntity);
+
+
+            var userResponse = new Models.User(userEntity, token);
 
             ////read cookie from IHttpContextAccessor  
             // string cookieValueFromContext = _httpContextAccessor.HttpContext.Request.Cookies["key"];
 
-            CreateCookieWithJWTTokenForUser(userEntity);
+
+
 
             return userResponse;
         }
@@ -67,8 +73,8 @@ namespace Chat.API.Services
             _apiDbContext.Users.Add(userEntity);
             await _apiDbContext.SaveChangesAsync();
 
-            var userResponse = new Models.User(userEntity);
-            CreateCookieWithJWTTokenForUser(userEntity);
+            var token = CreateCookieWithJWTTokenForUser(userEntity);
+            var userResponse = new Models.User(userEntity, token);
 
             return userResponse;
         }
@@ -90,7 +96,11 @@ namespace Chat.API.Services
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()), new Claim("username", user.Name) }),
+                Subject = new ClaimsIdentity(new[] {
+                    new Claim(ClaimTypes.Name, user.Id.ToString()),
+                    new Claim(ClaimTypes.NameIdentifier, user.Name.ToString()),
+                    }
+                ),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
@@ -100,13 +110,13 @@ namespace Chat.API.Services
             return tokenHandler.WriteToken(token);
         }
 
-        private void CreateCookieWithJWTTokenForUser(User user)
+        private string CreateCookieWithJWTTokenForUser(User user)
         {
             var response = _httpContextAccessor.HttpContext.Response;
 
             int? expireTime = 100;
             var key = _authCookieHeaderName;
-            var value = GenerateJWTTokenForUser(user);
+            var token = GenerateJWTTokenForUser(user);
 
             CookieOptions option = new CookieOptions();
 
@@ -115,7 +125,10 @@ namespace Chat.API.Services
             else
                 option.Expires = DateTime.Now.AddMilliseconds(10);
 
-            response.Cookies.Append(key, value, option);
+            response.Cookies.Append(key, token, option);
+
+
+            return token;
         }
 
 

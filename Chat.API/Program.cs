@@ -1,11 +1,20 @@
 using Chat.API.Persistance;
 using Chat.API.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.Net.Http.Headers;
+using System.Globalization;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 
 builder.Services.AddControllers();
 
@@ -18,13 +27,40 @@ builder.Services.AddDbContext<ApiDbContext>(options =>
 builder.Services.AddScoped<ChatService>();
 builder.Services.AddScoped<LoginService>();
 
+
+
 builder.Services.AddHttpContextAccessor();
+
+
+
+var secretKey = builder.Configuration.GetValue<string>("SecretKey");
+var tokenHandler = new JwtSecurityTokenHandler();
+var key = Encoding.ASCII.GetBytes(secretKey);
+
+
+builder.Services.AddAuthentication(options => {
+    options.DefaultAuthenticateScheme = "JwtBearer";
+    options.DefaultChallengeScheme = "JwtBearer";
+})
+.AddJwtBearer("JwtBearer", jwtBearerOptions =>
+{
+    jwtBearerOptions.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
+        ValidateIssuer = false,
+        //ValidIssuer = "The name of the issuer",
+        ValidateAudience = false,
+        //ValidAudience = "The name of the audience",
+        ValidateLifetime = true, //validate the expiration and not before values in the token
+        ClockSkew = TimeSpan.FromMinutes(5) //5 minute tolerance for the expiration date
+    };
+});
+
 
 var app = builder.Build();
 
-
 # if DEBUG
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -34,6 +70,30 @@ if (app.Environment.IsDevelopment())
 
 
 app.UseAuthorization();
+app.UseAuthentication();
+
 app.MapControllers();
+
+
+
+app.Use(async (context, next) =>
+{
+    var token = context.Request.Cookies["token"];
+
+
+    var name = context.User?.Identity?.Name;
+    Console.WriteLine($"Name: {name}");
+
+    var handler = new JwtSecurityTokenHandler();
+    var DecodedJWT = handler.ReadJwtToken(token);
+
+    //DecodedJWT.Claims["id"]
+
+    string payload = DecodedJWT.EncodedPayload;  // Gives Payload
+    //return Encoding.UTF8.GetString(FromBase64Url(payload));
+
+    await next(context);
+});
+
 
 app.Run();

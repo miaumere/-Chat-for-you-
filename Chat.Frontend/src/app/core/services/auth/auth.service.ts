@@ -19,6 +19,8 @@ export class AuthService {
       .pipe(
         tap((res: { token: string; user: User }) => {
           this.user$.next(res.user);
+
+          localStorage.setItem('authToken', res.token);
         })
       );
   }

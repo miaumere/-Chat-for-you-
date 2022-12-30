@@ -7,7 +7,8 @@ import { AppComponent } from './app.component';
 import { FooterComponent } from './core/footer/footer.component';
 import { AuthGuard } from './core/services/auth/auth-guard.service';
 
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { Interceptor } from './core/services/interceptor';
 
 function initializeApp(): void {}
 
@@ -22,6 +23,8 @@ function initializeApp(): void {}
       multi: true,
     },
     AuthGuard,
+
+    { provide: HTTP_INTERCEPTORS, useClass: Interceptor, multi: true },
   ],
 })
 export class AppModule {}
