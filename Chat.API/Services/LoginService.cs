@@ -42,7 +42,7 @@ namespace Chat.API.Services
                 .Where(x => x.Name == request.Username && x.Password == HashPassword(request.Password))
                 .SingleOrDefaultAsync();
 
-            if (!_apiDbContext.Users.ToList().Where(x => x.Name == request.Username).Any())
+            if (userEntity == null)
             {
                 throw new Exception("User does not exist!");
             }
@@ -56,7 +56,13 @@ namespace Chat.API.Services
 
         public async Task<string> Registrate(UserRequest request)
         {
-            if (_apiDbContext.Users.Where(x => x.Name == request.Username).Any())
+
+            var sameUser = await _apiDbContext
+                .Users
+                .Where(x => x.Name == request.Username)
+                .FirstOrDefaultAsync();
+
+            if (sameUser != null)
             {
                 throw new Exception("User of this username exists");
             }
@@ -68,7 +74,6 @@ namespace Chat.API.Services
             await _apiDbContext.SaveChangesAsync();
 
             var token = CreateCookieWithJWTTokenForUser(userEntity);
-            var userResponse = new UserDto(userEntity, token);
 
             return token;
         }
@@ -120,7 +125,6 @@ namespace Chat.API.Services
                 option.Expires = DateTime.Now.AddMilliseconds(10);
 
             response.Cookies.Append(key, token, option);
-
 
             return token;
         }

@@ -97,8 +97,8 @@ export class LoginPageComponent extends BaseComponent implements OnInit {
         next: () => {
           this._router.navigate(['/chat']);
         },
-        error: () => {
-          this.loginError = true;
+        error: (e) => {
+          console.error(e);
         },
       })
     );

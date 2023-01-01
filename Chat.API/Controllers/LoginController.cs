@@ -30,7 +30,7 @@ namespace Chat.API.Controllers
 
         }
 
-        [HttpPost, Route("registrate")]
+        [HttpPost, Route("register")]
         public async Task<ActionResult<string>> Registrate([FromBody] UserRequest request)
         {
             return await _loginService.Registrate(request);

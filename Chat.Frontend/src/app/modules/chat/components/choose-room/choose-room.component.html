@@ -30,7 +30,7 @@
         <span class="icon" (click)="goToChatRoom(room.id)">➡️</span>
       </div>
     </ng-container>
-    <span *ngIf="roomsCreatedByOthers.length >= 0" class="no-available-rooms">
+    <span *ngIf="roomsCreatedByOthers.length == 0" class="no-available-rooms">
       no available rooms <br />
       created by others
     </span>

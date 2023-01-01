@@ -31,12 +31,17 @@ export class AuthService {
   }
 
   register(request: ILoginRequest): Observable<string> {
-    return this.http.post<string>(`${this._baseUrl}/registrate`, request).pipe(
-      tap((token: string) => {
-        localStorage.setItem('authToken', token);
-        this.user$.next(getUserFromJWT());
+    return this.http
+      .post(`${this._baseUrl}/register`, request, {
+        responseType: 'text',
       })
-    );
+      .pipe(
+        tap((token: string) => {
+          console.log('string: ', token);
+          localStorage.setItem('authToken', token);
+          this.user$.next(getUserFromJWT());
+        })
+      );
   }
 
   logout(): void {
