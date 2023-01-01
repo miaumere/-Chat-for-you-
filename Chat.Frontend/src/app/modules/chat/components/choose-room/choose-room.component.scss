@@ -1,8 +1,39 @@
-.button {
-  &[disabled] {
-    color: grey;
-    pointer-events: none;
+.choose-room-container {
+  display: flex;
+  justify-content: space-around;
+}
+.container {
+  font-family: var(--font-basic);
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
+  margin-top: 1rem;
+  font-size: 1rem;
+
+  &__title {
+    margin: 1rem;
   }
+
+  & input,
+  select,
+  .room {
+    font-size: 1rem;
+    height: 3rem;
+    width: 25rem;
+
+    margin: 0.5rem;
+  }
+
+  & label {
+    display: flex;
+    align-items: baseline;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+}
+
+.button {
   &--go {
     margin-top: 1.5rem;
   }
@@ -13,4 +44,20 @@
   &:hover {
     color: var(--font-second-color);
   }
+}
+
+.room {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 1rem;
+  box-sizing: border-box;
+
+  border-radius: 3px;
+  background: var(--secondary-color);
+}
+
+.no-available-rooms {
+  color: grey;
 }

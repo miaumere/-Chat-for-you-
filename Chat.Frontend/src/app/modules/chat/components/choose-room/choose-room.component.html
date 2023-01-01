@@ -1,42 +1,34 @@
 <app-header></app-header>
 
-<div class="initial-page-container">
-  <form [formGroup]="form">
-    <label for="choose-room">
-      choose room:
-      <select id="choose-room" formControlName="chatRoom">
-        <option [value]="null">---</option>
-        <option *ngFor="let room of availableRooms" [value]="room.id">
-          {{ room.name }}
-        </option>
-      </select></label
-    >
-  </form>
-  <button
-    (click)="goToChatRoom()"
-    class="button button--go"
-    [disabled]="!form.valid"
-  >
-    💬 ok, let's chat!
-  </button>
-  <br />
-  or
-  <br />
-  <button
-    (click)="isNewRoomFormVisible = true"
-    *ngIf="!isNewRoomFormVisible"
-    class="button button--create-new-room"
-  >
-    ➕ create new room
-  </button>
+<div class="choose-room-container">
+  <div class="container container--my-rooms">
+    <div class="container__title">my rooms:</div>
 
-  <form *ngIf="isNewRoomFormVisible" [formGroup]="createNewForm">
-    <label>
-      new room name:
-      <input type="text" formControlName="username" />
-    </label>
-  </form>
-  <button class="button button--create-new-room" *ngIf="isNewRoomFormVisible">
-    ➕ 💬 create and join
-  </button>
+    <form [formGroup]="createNewForm">
+      <label>
+        new room name:
+        <input type="text" formControlName="chatRoomName" />
+      </label>
+      <button class="button button--create-new-room" (click)="createRoom()">
+        ➕ create new room
+      </button>
+    </form>
+
+    <div class="container__title">rooms created by me:</div>
+    <div class="room">
+      <span>Room 1</span> <span class="icon" (click)="deleteRoom()">❌</span>
+    </div>
+  </div>
+
+  <div class="container container--other-rooms">
+    <ng-container *ngIf="availableRooms.length > 0">
+      <div class="room" *ngFor="let room of availableRooms">
+        <span>Room 1</span>
+        <span class="icon" (click)="goToChatRoom(room.id)">➡️</span>
+      </div>
+    </ng-container>
+    <span *ngIf="availableRooms.length >= 0" class="no-available-rooms">
+      no available rooms
+    </span>
+  </div>
 </div>

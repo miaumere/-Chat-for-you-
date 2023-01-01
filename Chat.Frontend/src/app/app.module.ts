@@ -9,7 +9,6 @@ import { AuthGuard } from './core/services/auth/auth-guard.service';
 
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Interceptor } from './core/services/interceptor';
-import { getUserFromJWT } from './core/utils/get-user-from-jwt.function';
 
 function initializeApp(): void {}
 

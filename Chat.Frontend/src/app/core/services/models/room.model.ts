@@ -1,15 +1,15 @@
-export interface IRoom {
+export interface IRoomDto {
   id: number;
   name: string;
   author: string;
 }
 
-export class Room implements IRoom {
+export class RoomDto implements IRoomDto {
   id = 0;
   name: string = '';
   author: string = '';
 
-  constructor(initialValues: IRoom) {
+  constructor(initialValues: IRoomDto) {
     Object.assign(this, initialValues);
   }
 }

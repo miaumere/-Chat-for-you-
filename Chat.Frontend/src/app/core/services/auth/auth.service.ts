@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { getUserFromJWT } from '../../utils/get-user-from-jwt.function';
@@ -12,7 +13,7 @@ export class AuthService {
 
   public user$ = new BehaviorSubject<UserDto | null>(null);
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private _router: Router) {
     this.user$.next(getUserFromJWT());
   }
 
@@ -41,5 +42,6 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem('authToken');
     this.user$.next(null);
+    this._router.navigate(['./login']);
   }
 }

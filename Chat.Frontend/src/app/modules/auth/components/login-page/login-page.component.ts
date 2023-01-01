@@ -4,8 +4,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { BaseComponent } from 'src/app/core/base.component';
-import { ChatService } from 'src/app/core/services/chat/chat.service';
-import { Room } from 'src/app/core/services/models/room.model';
+import { RoomService } from 'src/app/core/services/room/room.service';
+import { RoomDto } from 'src/app/core/services/models/room.model';
 import { ILoginRequest } from 'src/app/core/services/models/login-request.model';
 
 @Component({
@@ -27,7 +27,7 @@ export class LoginPageComponent extends BaseComponent implements OnInit {
 
   isNewRoomFormVisible = false;
 
-  availableRooms: Room[] = [];
+  availableRooms: RoomDto[] = [];
   passwordsError = false;
   loginError = false;
 
@@ -52,7 +52,7 @@ export class LoginPageComponent extends BaseComponent implements OnInit {
       username: this.form.value.username,
       password: this.form.value.password,
     };
-    console.log('xxx');
+
     this.subscriptions$.add(
       this._authService.login(request).subscribe({
         next: (t) => {
