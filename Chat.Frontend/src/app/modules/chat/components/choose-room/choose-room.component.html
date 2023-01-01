@@ -15,20 +15,24 @@
     </form>
 
     <div class="container__title">rooms created by me:</div>
-    <div class="room">
-      <span>Room 1</span> <span class="icon" (click)="deleteRoom()">❌</span>
-    </div>
+    <ng-container *ngIf="roomsCreatedByMe.length > 0">
+      <div class="room" *ngFor="let room of roomsCreatedByMe">
+        <span>{{ room.name }}</span>
+        <span class="icon" (click)="deleteRoom(room.id)">❌</span>
+      </div>
+    </ng-container>
   </div>
 
   <div class="container container--other-rooms">
-    <ng-container *ngIf="availableRooms.length > 0">
-      <div class="room" *ngFor="let room of availableRooms">
-        <span>Room 1</span>
+    <ng-container *ngIf="roomsCreatedByOthers.length > 0">
+      <div class="room" *ngFor="let room of roomsCreatedByOthers">
+        <span>{{ room.name }}</span>
         <span class="icon" (click)="goToChatRoom(room.id)">➡️</span>
       </div>
     </ng-container>
-    <span *ngIf="availableRooms.length >= 0" class="no-available-rooms">
-      no available rooms
+    <span *ngIf="roomsCreatedByOthers.length >= 0" class="no-available-rooms">
+      no available rooms <br />
+      created by others
     </span>
   </div>
 </div>

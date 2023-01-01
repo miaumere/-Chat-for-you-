@@ -19,7 +19,7 @@ namespace Chat.API.Controllers
         }
 
         [HttpGet, Route("")]
-        public async Task<List<RoomDto>> GetRooms()
+        public async Task<RoomsResponse> GetRooms()
         {
             return await _roomService.GetRooms();
         }
@@ -28,6 +28,12 @@ namespace Chat.API.Controllers
         public async Task<bool> CreateRoom([FromBody] RoomRequest request)
         {
             return await _roomService.CreateRoom(request);
+        }
+
+        [HttpDelete, Route("")]
+        public async Task<bool> DeleteRoom([FromQuery] int roomId)
+        {
+            return await _roomService.DeleteRoom(roomId);
         }
     }
 }

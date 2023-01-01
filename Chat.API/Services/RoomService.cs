@@ -17,27 +17,46 @@ namespace Chat.API.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<List<RoomDto>> GetRooms()
-        {
-            var rooms = new List<RoomDto>();
 
-            var roomsFromDb = await _apiDbContext.Rooms.ToListAsync();
+        public int GetUserIdFromHttpContext()
+        {
+            var userIdFromHttpContext = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
+            return Convert.ToInt32(userIdFromHttpContext);
+        }
+
+        public async Task<RoomsResponse> GetRooms()
+        {
+            var response = new RoomsResponse();
+
+            var roomsFromDb = await _apiDbContext
+                .Rooms
+                .Include(r => r.CreatedBy)
+                .ToListAsync();
+
+            int userId = GetUserIdFromHttpContext();
 
             foreach (var roomFromDb in roomsFromDb)
             {
                 var room = new RoomDto(roomFromDb);
-
-                //room.IsCreatedByLoggedUser = true;
-                rooms.Add(room);
+                var id = roomFromDb.CreatedBy.Id;
+                if (roomFromDb.CreatedBy.Id == userId)
+                {
+                    response.RoomsCreatedByMe.Add(room);
+                }
+                else
+                {
+                    response.RoomsCreatedByOthers.Add(room);
+                }
             }
-            return rooms;
+
+            return response;
         }
 
 
          public async Task<bool> CreateRoom(RoomRequest roomRequest)
         {
-            var userIdFromHttpContext = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
-            int userId = Convert.ToInt32(userIdFromHttpContext);
+            int userId = GetUserIdFromHttpContext();
+
             var user = await _apiDbContext
                 .Users
                 .Where(user => user.Id == userId)
@@ -56,6 +75,27 @@ namespace Chat.API.Services
             await _apiDbContext.SaveChangesAsync();
             return true;
         }
+
+        public async Task<bool> DeleteRoom(int roomId)
+        {
+
+            int userId = GetUserIdFromHttpContext();
+
+            var roomToDelete = await _apiDbContext.Rooms
+                .Include(r => r.CreatedBy)
+                .Where(r => r.Id== roomId && r.CreatedBy.Id == userId)
+                .SingleOrDefaultAsync();
+            if(roomToDelete == null)
+            {
+                return false;
+            }
+
+            _apiDbContext.Remove(roomToDelete);
+            await _apiDbContext.SaveChangesAsync();
+
+            return true;
+        }
+
 
     }
 }

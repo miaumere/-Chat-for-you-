@@ -19,16 +19,22 @@ export class ChooseRoomComponent extends BaseComponent implements OnInit {
     ]),
   });
 
-  availableRooms: RoomDto[] = [];
+  roomsCreatedByMe: RoomDto[] = [];
+  roomsCreatedByOthers: RoomDto[] = [];
 
   constructor(private _router: Router, private _roomService: RoomService) {
     super();
   }
 
   ngOnInit(): void {
+    this.getChatRooms();
+  }
+
+  getChatRooms() {
     this.subscriptions$.add(
-      this._roomService.getRooms().subscribe((rooms) => {
-        this.availableRooms = rooms;
+      this._roomService.getRooms().subscribe((roomsResponse) => {
+        this.roomsCreatedByMe = roomsResponse.roomsCreatedByMe;
+        this.roomsCreatedByOthers = roomsResponse.roomsCreatedByOthers;
       })
     );
   }
@@ -37,7 +43,13 @@ export class ChooseRoomComponent extends BaseComponent implements OnInit {
     this._router.navigate(['/', roomId]);
   }
 
-  deleteRoom() {}
+  deleteRoom(roomId: number) {
+    this.subscriptions$.add(
+      this._roomService.deleteRoom(roomId).subscribe(() => {
+        this.getChatRooms();
+      })
+    );
+  }
 
   createRoom() {
     if (!this.createNewForm.valid) {
@@ -48,7 +60,10 @@ export class ChooseRoomComponent extends BaseComponent implements OnInit {
     };
 
     this.subscriptions$.add(
-      this._roomService.createRoom(request).subscribe((x) => {})
+      this._roomService.createRoom(request).subscribe(() => {
+        this.getChatRooms();
+        this.createNewForm.reset();
+      })
     );
   }
 }
