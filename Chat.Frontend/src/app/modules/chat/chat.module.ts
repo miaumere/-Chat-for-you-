@@ -8,7 +8,7 @@ import { ChatIndexComponent } from './components/chat-index.component';
 import { ChatRoomComponent } from './components/chat-room/chat-room.component';
 import { UsersListComponent } from './components/chat-room/components/users-list/users-list.component';
 import { ChatBoxComponent } from './components/chat-room/components/chat-box/chat-box.component';
-import { RoomService } from 'src/app/core/services/room/room.service';
+import { RoomService } from 'src/app/core/services/room.service';
 import { HttpClientModule } from '@angular/common/http';
 import { ChooseRoomComponent } from './components/choose-room/choose-room.component';
 

@@ -5,7 +5,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FooterComponent } from './core/footer/footer.component';
-import { AuthGuard } from './core/services/auth/auth-guard.service';
+import { AuthGuard } from './core/services/auth-guard.service';
 
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Interceptor } from './core/services/interceptor';

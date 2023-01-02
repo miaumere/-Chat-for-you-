@@ -1,14 +1,15 @@
 <div class="chat-box">
   <div class="messages">
     <div class="messages__item" *ngFor="let message of messages">
-      <app-profile-pic [username]="message.author.username"></app-profile-pic>
+      {{ message }}
+      <!-- <app-profile-pic [username]="message.author.username"></app-profile-pic>
       <div class="chat-box-name-and-content">
         <div>
           <span class="name">{{ message.author.username }}</span>
           <span class="message-date">{{ message.date | date : "medium" }}</span>
         </div>
         <div class="message-content">{{ message.content }}</div>
-      </div>
+      </div> -->
     </div>
   </div>
   <div class="new-message">

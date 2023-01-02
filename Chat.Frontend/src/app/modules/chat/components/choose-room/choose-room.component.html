@@ -17,8 +17,11 @@
     <div class="container__title">rooms created by me:</div>
     <ng-container *ngIf="roomsCreatedByMe.length > 0">
       <div class="room" *ngFor="let room of roomsCreatedByMe">
-        <span>{{ room.name }}</span>
-        <span class="icon" (click)="deleteRoom(room.id)">❌</span>
+        <span>
+          <span class="icon" (click)="deleteRoom(room.id)">❌</span>
+          {{ room.name }}</span
+        >
+        <span class="icon" [routerLink]="['./', room.id]">➡️</span>
       </div>
     </ng-container>
   </div>

@@ -3,8 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { BaseComponent } from 'src/app/core/base.component';
-import { RoomService } from 'src/app/core/services/room/room.service';
 import { RoomDto } from 'src/app/core/services/models/room-dto.model';
+import { RoomService } from 'src/app/core/services/room.service';
 
 @Component({
   selector: 'app-choose-room',

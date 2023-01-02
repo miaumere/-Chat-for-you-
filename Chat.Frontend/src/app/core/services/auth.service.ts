@@ -3,9 +3,9 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { getUserFromJWT } from '../../utils/get-user-from-jwt.function';
-import { ILoginRequest } from '../models/login-request.model';
-import { UserDto } from '../models/user.model';
+import { getUserFromJWT } from '../utils/get-user-from-jwt.function';
+import { ILoginRequest } from './models/login-request.model';
+import { UserDto } from './models/user.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -37,7 +37,6 @@ export class AuthService {
       })
       .pipe(
         tap((token: string) => {
-          console.log('string: ', token);
           localStorage.setItem('authToken', token);
           this.user$.next(getUserFromJWT());
         })

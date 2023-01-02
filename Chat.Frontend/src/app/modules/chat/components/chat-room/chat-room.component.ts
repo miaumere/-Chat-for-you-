@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BaseComponent } from 'src/app/core/base.component';
 import { IRoomDetailsDto } from 'src/app/core/services/models/room-details-dto';
-import { RoomService } from 'src/app/core/services/room/room.service';
+import { RoomService } from 'src/app/core/services/room.service';
 
 @Component({
   selector: 'app-chat-room',

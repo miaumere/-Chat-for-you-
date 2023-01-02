@@ -1,12 +1,12 @@
-import { AuthService } from './../../../../core/services/auth/auth.service';
 import { Subscription } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { BaseComponent } from 'src/app/core/base.component';
-import { RoomService } from 'src/app/core/services/room/room.service';
+import { RoomService } from 'src/app/core/services/room.service';
 import { RoomDto } from 'src/app/core/services/models/room-dto.model';
 import { ILoginRequest } from 'src/app/core/services/models/login-request.model';
+import { AuthService } from 'src/app/core/services/auth.service';
 
 @Component({
   selector: 'app-login-page',

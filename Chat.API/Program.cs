@@ -1,8 +1,10 @@
+using Chat.API.Hubs;
 using Chat.API.Persistance;
 using Chat.API.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Configuration;
@@ -29,6 +31,7 @@ builder.Services.AddScoped<LoginService>();
 
 builder.Services.AddHttpContextAccessor();
 
+builder.Services.AddSignalR();
 
 var secretKey = builder.Configuration.GetValue<string>("SecretKey");
 var tokenHandler = new JwtSecurityTokenHandler();
@@ -65,6 +68,12 @@ if (app.Environment.IsDevelopment())
 }
 #endif
 
+
+app.MapHub<ChatHub>("/chatHub", options =>
+{
+    options.Transports =
+    HttpTransportType.WebSockets;
+});
 
 app.UseAuthorization();
 app.UseAuthentication();

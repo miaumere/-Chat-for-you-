@@ -1,9 +1,8 @@
-import { IRoomDto, RoomDto } from '../models/room-dto.model';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs';
-import { IRoomRequest } from '../models/room-request.model';
-import { RoomsResponse, IRoomsResponse } from '../models/rooms-response';
+import { IRoomRequest } from './models/room-request.model';
+import { RoomsResponse, IRoomsResponse } from './models/rooms-response';
 
 @Injectable({
   providedIn: 'root',

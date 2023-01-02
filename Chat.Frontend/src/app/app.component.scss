@@ -1,3 +1,5 @@
+@import "variables.scss";
+
 :host {
   display: flex;
   flex-direction: column;
@@ -6,5 +8,5 @@
 }
 
 .main-content {
-  height: 100%;
+  height: calc(100% - #{$footer-size});
 }

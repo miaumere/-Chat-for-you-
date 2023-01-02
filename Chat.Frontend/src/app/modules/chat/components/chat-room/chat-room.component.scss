@@ -1,5 +1,7 @@
+@import "variables.scss";
+
 .chat-room {
-  height: 100%;
+  height: calc(100%);
   background: var(--secondary-color);
 
   &__name {
