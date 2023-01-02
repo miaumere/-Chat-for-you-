@@ -4,15 +4,8 @@
   <ul>
     <li *ngFor="let user of userList">
       <div class="user-info">
-        <img
-          class="profile-pic"
-          [src]="
-            'https://avatars.dicebear.com/api/initials/' +
-            user.username +
-            '.svg'
-          "
-        />
-        <span class="username">{{ user.username }}</span>
+        <app-profile-pic [username]="user.username"></app-profile-pic>
+        <span>{{ user.username }}</span>
       </div>
     </li>
   </ul>

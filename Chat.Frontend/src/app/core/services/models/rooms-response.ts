@@ -1,4 +1,4 @@
-import { IRoomDto } from './room.model';
+import { IRoomDto } from './room-dto.model';
 
 export interface IRoomsResponse {
   roomsCreatedByMe: IRoomDto[];

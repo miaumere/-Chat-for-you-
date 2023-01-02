@@ -1,7 +1,11 @@
 .users-list-panel {
-  font-size: 0.8rem;
+  box-sizing: border-box;
+
+  height: 100%;
 
   background: var(--secondary-color);
+  padding: 0rem 1rem 1rem 1rem;
+  font-size: 0.8rem;
 
   &__title {
     color: var(--font-second-color);
@@ -10,12 +14,16 @@
   }
 }
 
-.username {
-  margin-left: 0.5rem;
-}
-
 .user-info {
   display: flex;
   align-items: center;
   margin-bottom: 0.5rem;
+  color: var(--font-second-color);
+
+  &:first-child {
+    margin-top: 0.5rem;
+  }
+  &:last-child {
+    margin-bottom: 0;
+  }
 }

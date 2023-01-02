@@ -1,3 +1,4 @@
+import { UserDto } from './../../../../../../core/services/models/user.model';
 import { Component } from '@angular/core';
 
 @Component({
@@ -6,7 +7,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./users-list.component.scss'],
 })
 export class UsersListComponent {
-  readonly userList = [
+  readonly userList: UserDto[] = [
     {
       id: 0,
       username: 'Axel.Leschh',

@@ -6,15 +6,11 @@
     <button (click)="setTheme('dark')">🌚</button>
   </div>
   <div class="user-info">
-    <img
-      *ngIf="_authService.user$ | async"
+    <app-profile-pic
       class="profile-pic"
-      [src]="
-        'https://avatars.dicebear.com/api/initials/' +
-        (_authService.user$ | async)?.username +
-        '.svg'
-      "
-    />
+      *ngIf="_authService.user$ | async"
+      [username]="(_authService.user$ | async)!.username"
+    ></app-profile-pic>
     <span class="username">{{
       (_authService.user$ | async)?.username ?? "not logged in"
     }}</span>

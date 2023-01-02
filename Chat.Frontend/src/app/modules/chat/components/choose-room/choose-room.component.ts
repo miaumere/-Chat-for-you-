@@ -4,7 +4,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { BaseComponent } from 'src/app/core/base.component';
 import { RoomService } from 'src/app/core/services/room/room.service';
-import { RoomDto } from 'src/app/core/services/models/room.model';
+import { RoomDto } from 'src/app/core/services/models/room-dto.model';
 
 @Component({
   selector: 'app-choose-room',
@@ -22,7 +22,7 @@ export class ChooseRoomComponent extends BaseComponent implements OnInit {
   roomsCreatedByMe: RoomDto[] = [];
   roomsCreatedByOthers: RoomDto[] = [];
 
-  constructor(private _router: Router, private _roomService: RoomService) {
+  constructor(private _roomService: RoomService) {
     super();
   }
 
@@ -37,10 +37,6 @@ export class ChooseRoomComponent extends BaseComponent implements OnInit {
         this.roomsCreatedByOthers = roomsResponse.roomsCreatedByOthers;
       })
     );
-  }
-
-  goToChatRoom(roomId: number) {
-    this._router.navigate(['/', roomId]);
   }
 
   deleteRoom(roomId: number) {

@@ -5,7 +5,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { BaseComponent } from 'src/app/core/base.component';
 import { RoomService } from 'src/app/core/services/room/room.service';
-import { RoomDto } from 'src/app/core/services/models/room.model';
+import { RoomDto } from 'src/app/core/services/models/room-dto.model';
 import { ILoginRequest } from 'src/app/core/services/models/login-request.model';
 
 @Component({

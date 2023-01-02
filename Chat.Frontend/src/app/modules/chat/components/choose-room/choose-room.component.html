@@ -27,7 +27,7 @@
     <ng-container *ngIf="roomsCreatedByOthers.length > 0">
       <div class="room" *ngFor="let room of roomsCreatedByOthers">
         <span>{{ room.name }}</span>
-        <span class="icon" (click)="goToChatRoom(room.id)">➡️</span>
+        <span class="icon" [routerLink]="['./', room.id]">➡️</span>
       </div>
     </ng-container>
     <span *ngIf="roomsCreatedByOthers.length == 0" class="no-available-rooms">

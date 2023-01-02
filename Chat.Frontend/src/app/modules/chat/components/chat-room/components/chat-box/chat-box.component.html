@@ -1,3 +1,25 @@
-<p>chat-box works!</p>
+<div class="chat-box">
+  <div class="messages">
+    <div class="messages__item" *ngFor="let message of messages">
+      <app-profile-pic [username]="message.author.username"></app-profile-pic>
+      <div class="chat-box-name-and-content">
+        <div>
+          <span class="name">{{ message.author.username }}</span>
+          <span class="message-date">{{ message.date | date : "medium" }}</span>
+        </div>
+        <div class="message-content">{{ message.content }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="new-message">
+    <textarea
+      [formControl]="messageFormControl"
+      placeholder="write something..."
+      class="new-message__textarea"
+      (keyup.enter)="sendMessage()"
+      (keydown)="resize($event)"
+    ></textarea>
 
-<div class="chat-box"></div>
+    <div class="icon" (click)="sendMessage()">➕</div>
+  </div>
+</div>

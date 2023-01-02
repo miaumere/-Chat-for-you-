@@ -1,3 +1,4 @@
+import { SharedModule } from './../shared/shared.module';
 import { HeaderComponent } from 'src/app/core/header/header.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -25,6 +26,7 @@ import { ChooseRoomComponent } from './components/choose-room/choose-room.compon
     ChatRoutingModule,
     HttpClientModule,
     HeaderComponent,
+    SharedModule,
   ],
   providers: [RoomService],
 })
