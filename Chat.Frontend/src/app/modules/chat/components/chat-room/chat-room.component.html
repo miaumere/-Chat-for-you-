@@ -1,10 +1,14 @@
-<div class="chat-room" *ngIf="roomDetails">
+<div class="chat-room">
   <h2 class="chat-room__name">
     <div class="icon back-icon" [routerLink]="['../']">↩️</div>
-    {{ roomDetails.name }}
+    {{ name }}
   </h2>
   <div class="chat-room__content">
-    <app-chat-box style="width: 100%" [messages]="messages"></app-chat-box>
+    <app-chat-box
+      style="width: 100%"
+      [messages]="messages"
+      [user]="user"
+    ></app-chat-box>
     <app-users-list></app-users-list>
   </div>
 </div>

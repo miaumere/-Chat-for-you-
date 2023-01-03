@@ -12,5 +12,9 @@ namespace Chat.API.Models
             Id = roomFromDb.Id;
             Name = roomFromDb.Name;
         }
+
+        public RoomDto()
+        {
+        }
     }
 }

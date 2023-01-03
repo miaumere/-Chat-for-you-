@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { BaseComponent } from 'src/app/core/base.component';
+import { AuthService } from 'src/app/core/services/auth.service';
 import { ChatService } from 'src/app/core/services/chat.service';
-import { IRoomDetailsDto } from 'src/app/core/services/models/room-details-dto';
+import { UserDto } from 'src/app/core/services/models/user.model';
 import { RoomService } from 'src/app/core/services/room.service';
 
 @Component({
@@ -10,34 +12,42 @@ import { RoomService } from 'src/app/core/services/room.service';
   styleUrls: ['./chat-room.component.scss'],
 })
 export class ChatRoomComponent extends BaseComponent implements OnInit {
-  roomDetails: IRoomDetailsDto | null = {
-    id: 1,
-    name: 'Room 1 ',
-  };
-
+  name: string = '';
+  user?: UserDto;
   messages: string[] = [];
 
   constructor(
+    private _chatService: ChatService,
+    private _route: ActivatedRoute,
     private _roomService: RoomService,
-    public _chatService: ChatService
+    private _authService: AuthService
   ) {
     super();
   }
 
   ngOnInit(): void {
+    this._authService.user$.subscribe((user) => {
+      if (user) this.user = user;
+    });
+
     this._chatService.startConnection();
 
+    this.getRoomDetails();
+
     this._chatService.messages$.subscribe((messages) => {
-      console.log('new messages', messages);
       this.messages = [...messages];
     });
   }
 
   getRoomDetails() {
-    // this.subscriptions$.add(
-    //   this._roomService.getRooms().subscribe((roomsResponse) => {
-    //     this.roomsCreatedByMe = roomsResponse.roomsCreatedByMe;
-    //   })
-    // );
+    const roomId = this._route.snapshot.paramMap.get('id');
+
+    if (!!roomId) {
+      this.subscriptions$.add(
+        this._roomService.getRoomById(+roomId).subscribe((room) => {
+          this.name = room.name;
+        })
+      );
+    }
   }
 }

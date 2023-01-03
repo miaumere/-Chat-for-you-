@@ -1,6 +1,8 @@
+import { UserDto } from './models/user.model';
 import { BehaviorSubject } from 'rxjs';
 import { Injectable } from '@angular/core';
 import * as signalR from '@microsoft/signalr';
+import { getUserFromJWT } from '../utils/get-user-from-jwt.function';
 
 @Injectable({ providedIn: 'root' })
 export class ChatService {
@@ -11,7 +13,12 @@ export class ChatService {
   public messages$ = new BehaviorSubject<string[]>([]);
 
   public connection = new signalR.HubConnectionBuilder()
-    .withUrl(this._baseUrl)
+    .withUrl(this._baseUrl, {
+      accessTokenFactory: () => {
+        const authToken = localStorage.getItem('authToken');
+        return `${authToken}`;
+      },
+    })
     .build();
 
   constructor() {}
@@ -22,13 +29,18 @@ export class ChatService {
     await this.connection.start();
 
     this.connection.on('ReceiveMessage', (msg: string) => {
-      console.log('ReceiveMessage', msg);
       this.messages.push(msg);
       this.messages$.next(this.messages);
+      console.log('messages: ', this.messages);
     });
   }
 
-  async sendMessage(message: string) {
-    await this.connection.invoke('ProcessMessage', message);
+  async sendMessage(message: string, user: UserDto | undefined) {
+    if (!user) {
+      console.error('no user');
+      return;
+    }
+
+    await this.connection.invoke('ProcessMessage', message, user.id);
   }
 }

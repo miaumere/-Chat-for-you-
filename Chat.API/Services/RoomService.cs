@@ -2,7 +2,6 @@
 using Chat.API.Persistance;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using RoomDto = Chat.API.Models.RoomDto;
 
 namespace Chat.API.Services
 {
@@ -52,8 +51,21 @@ namespace Chat.API.Services
             return response;
         }
 
+        public async Task<RoomDto> GetRoomDetailsById(int roomId)
+        {
 
-         public async Task<bool> CreateRoom(RoomRequest roomRequest)
+            var roomsFromDb = await _apiDbContext
+                .Rooms
+                .Where(r => r.Id == roomId)
+                .FirstOrDefaultAsync();
+
+            var response = new RoomDto(roomsFromDb);
+            
+            return response;
+        }
+
+
+        public async Task<bool> CreateRoom(RoomRequest roomRequest)
         {
             int userId = GetUserIdFromHttpContext();
 

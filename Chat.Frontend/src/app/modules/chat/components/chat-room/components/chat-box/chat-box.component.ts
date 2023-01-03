@@ -1,3 +1,4 @@
+import { BaseComponent } from 'src/app/core/base.component';
 import { UserDto } from './../../../../../../core/services/models/user.model';
 import {
   Component,
@@ -10,9 +11,10 @@ import { FormControl, Validators } from '@angular/forms';
 import { ChatService } from 'src/app/core/services/chat.service';
 import { IMessage } from 'src/app/core/services/models/message.model';
 import { BehaviorSubject } from 'rxjs';
+import { AuthService } from 'src/app/core/services/auth.service';
 
 @Component({
-  selector: 'app-chat-box',
+  selector: 'app-chat-box [user] [messages]',
   templateUrl: './chat-box.component.html',
   styleUrls: ['./chat-box.component.scss'],
 })
@@ -21,6 +23,7 @@ export class ChatBoxComponent {
   isUserAtTheBottom = true;
 
   @Input() messages: string[] = [];
+  @Input() user?: UserDto;
 
   @ViewChild('messageBox', { static: true }) messageBox: ElementRef | undefined;
 
@@ -35,11 +38,9 @@ export class ChatBoxComponent {
     }
   }
 
-  constructor(public _chatService: ChatService) {}
+  constructor(private _chatService: ChatService) {}
 
-  ngOnInit(): void {
-    const box = this.messageBox?.nativeElement as any;
-  }
+  ngOnInit(): void {}
 
   onScroll(event: any) {
     this.isUserAtTheBottom =
@@ -58,10 +59,8 @@ export class ChatBoxComponent {
       return;
     }
 
-    this._chatService.sendMessage(value);
+    console.log('username: ');
+    this._chatService.sendMessage(value, this.user);
     this.messageFormControl.reset();
-    // this.messages = this._chatService.messages;
-
-    // console.log('messages: ', this.messages);
   }
 }

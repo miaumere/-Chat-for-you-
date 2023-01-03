@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs';
 import { IRoomRequest } from './models/room-request.model';
 import { RoomsResponse, IRoomsResponse } from './models/rooms-response';
+import { IRoomDto, RoomDto } from './models/room-dto.model';
 
 @Injectable({
   providedIn: 'root',
@@ -21,14 +22,14 @@ export class RoomService {
     );
   }
 
-  // getRooms() {
-  //   return this.http.get<IRoomDto[]>(`${this._baseUrl}`).pipe(
-  //     map((response: IRoomDto[]) => {
-  //       const mappedResponse = response.map((r) => new RoomDto(r));
-  //       return mappedResponse;
-  //     })
-  //   );
-  // }
+  getRoomById(roomId: number) {
+    return this.http.get<RoomDto>(`${this._baseUrl}/${roomId}`).pipe(
+      map((response: IRoomDto) => {
+        const mappedResponse = new RoomDto(response);
+        return mappedResponse;
+      })
+    );
+  }
 
   createRoom(request: IRoomRequest) {
     return this.http.post<boolean>(`${this._baseUrl}`, request);
