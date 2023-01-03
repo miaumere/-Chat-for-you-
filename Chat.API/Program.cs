@@ -49,14 +49,11 @@ builder.Services.AddAuthentication(options => {
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
         ValidateIssuer = false,
-        //ValidIssuer = "The name of the issuer",
         ValidateAudience = false,
-        //ValidAudience = "The name of the audience",
-        ValidateLifetime = true, //validate the expiration and not before values in the token
-        ClockSkew = TimeSpan.FromMinutes(5) //5 minute tolerance for the expiration date
+        ValidateLifetime = true, 
+        ClockSkew = TimeSpan.FromMinutes(5) 
     };
 });
-
 
 var app = builder.Build();
 

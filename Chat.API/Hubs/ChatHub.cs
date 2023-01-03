@@ -19,6 +19,8 @@ namespace Chat.API.Hubs
         public async void ProcessMessage(string message)
         {
             Console.WriteLine(message);
+
+           
             await Clients.All.SendAsync("ReceiveMessage", message);
         }
 

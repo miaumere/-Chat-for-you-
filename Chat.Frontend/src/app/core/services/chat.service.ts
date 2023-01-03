@@ -18,7 +18,8 @@ export class ChatService {
     await this.connection.onclose;
     await this.connection.start();
 
-    await this.connection.on('ProcessMessage', (msg: string) => {
+    this.connection.on('ReceiveMessage', (msg: string) => {
+      console.log('ReceiveMessage', msg);
       this.messages.push(msg);
     });
   }

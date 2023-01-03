@@ -23,7 +23,7 @@ $messages-text-size: 0.8rem;
   &__item {
     display: flex;
     margin-bottom: 0.5rem;
-    white-space: break-spaces;
+    white-space: pre-line;
     font-size: $messages-text-size;
   }
 }

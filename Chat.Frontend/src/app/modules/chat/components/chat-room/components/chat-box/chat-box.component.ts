@@ -10,7 +10,7 @@ import { IMessage } from 'src/app/core/services/models/message.model';
   styleUrls: ['./chat-box.component.scss'],
 })
 export class ChatBoxComponent {
-  messageFormControl = new FormControl('', Validators.minLength(1));
+  messageFormControl = new FormControl('', [Validators.min(1)]);
   messages: string[] = [];
 
   constructor(private _chatService: ChatService) {}
@@ -20,26 +20,11 @@ export class ChatBoxComponent {
   //     date: new Date(),
   //     content: 'hiii',
   //   },
-  //   {
-  //     author: { id: 2, username: 'jean' },
-  //     date: new Date(),
-  //     content:
-  //       'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestias error beatae ipsa! Suscipit facilis itaque autem dolore at dolores iusto quibusdam nihil nesciunt? Ea deleniti corrupti fugit ipsam expedita debitis? t, consectetur adipisicing elit. Molestias error beatae ipsa! Suscipit facilis itaque autem dolore at dolores iusto quibusdam nihil  t, consectetur adipisicing elit. Molestias error beatae ipsa! Suscipit facilis itaque autem dolore at dolores iusto quibusdam nihil  t, consectetur adipisicing elit. Molestias error beatae ipsa! Suscipit facilis itaque autem dolore at dolores iusto quibusdam nihil  \n \n \n \n t, consectetur adipisicing elit. Molestias error beatae ipsa! Suscipit facilis itaque autem dolore at dolores iusto quibusdam nihil ',
-  //   },
   // ];
 
   ngOnInit(): void {
     this._chatService.startConnection();
     this.messages = this._chatService.messages;
-
-    // this._chatService.lastMessages$.subscribe((messages) => {
-    //   console.log('replay: ', messages);
-    //   this.messages.push({
-    //     author: { id: 1, username: 'lol' },
-    //     date: new Date(),
-    //     content: messages,
-    //   });
-    // });
   }
 
   resize(e: any) {
@@ -48,15 +33,17 @@ export class ChatBoxComponent {
   }
 
   sendMessage() {
-    const message = this.messageFormControl.value;
-    if (!message) {
+    const value = '' + this.messageFormControl.value;
+    if (!this.messageFormControl.valid || !value) {
       return;
     }
 
-    this._chatService.sendMessage(this.messageFormControl.value as string);
+    this._chatService.sendMessage(value);
 
     this.messageFormControl.reset();
 
     this.messages = this._chatService.messages;
+
+    console.log('messages: ', this.messages);
   }
 }
