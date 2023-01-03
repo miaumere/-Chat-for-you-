@@ -1,3 +1,4 @@
+import { BehaviorSubject } from 'rxjs';
 import { Injectable } from '@angular/core';
 import * as signalR from '@microsoft/signalr';
 
@@ -6,6 +7,8 @@ export class ChatService {
   private readonly _baseUrl = 'chatHub';
 
   public messages: string[] = [];
+
+  public messages$ = new BehaviorSubject<string[]>([]);
 
   public connection = new signalR.HubConnectionBuilder()
     .withUrl(this._baseUrl)
@@ -21,6 +24,7 @@ export class ChatService {
     this.connection.on('ReceiveMessage', (msg: string) => {
       console.log('ReceiveMessage', msg);
       this.messages.push(msg);
+      this.messages$.next(this.messages);
     });
   }
 

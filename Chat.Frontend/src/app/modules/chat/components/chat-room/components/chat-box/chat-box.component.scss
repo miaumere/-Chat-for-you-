@@ -20,10 +20,13 @@ $messages-text-size: 0.8rem;
   overflow-y: auto;
   height: 100%;
 
+  background: purple;
+  overflow-anchor: auto;
+
   &__item {
     display: flex;
     margin-bottom: 0.5rem;
-    white-space: pre-line;
+    white-space: pre;
     font-size: $messages-text-size;
   }
 }

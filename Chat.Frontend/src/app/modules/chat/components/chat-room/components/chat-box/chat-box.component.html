@@ -1,7 +1,24 @@
 <div class="chat-box">
-  <div class="messages">
-    <div class="messages__item" *ngFor="let message of messages">
+  <div class="messages" #messageBox (scroll)="onScroll($event)">
+    <div class="messages__item" *ngFor="let message of messages" #lastMessage>
       {{ message }}
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
       <!-- <app-profile-pic [username]="message.author.username"></app-profile-pic>
       <div class="chat-box-name-and-content">
         <div>

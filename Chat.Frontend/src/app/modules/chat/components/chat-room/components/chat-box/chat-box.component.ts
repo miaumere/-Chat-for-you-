@@ -1,8 +1,15 @@
 import { UserDto } from './../../../../../../core/services/models/user.model';
-import { Component } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Input,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { ChatService } from 'src/app/core/services/chat.service';
 import { IMessage } from 'src/app/core/services/models/message.model';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-chat-box',
@@ -11,20 +18,33 @@ import { IMessage } from 'src/app/core/services/models/message.model';
 })
 export class ChatBoxComponent {
   messageFormControl = new FormControl('', [Validators.min(1)]);
-  messages: string[] = [];
+  isUserAtTheBottom = true;
 
-  constructor(private _chatService: ChatService) {}
-  // messages: IMessage[] = [
-  //   {
-  //     author: { id: 1, username: 'uran' },
-  //     date: new Date(),
-  //     content: 'hiii',
-  //   },
-  // ];
+  @Input() messages: string[] = [];
+
+  @ViewChild('messageBox', { static: true }) messageBox: ElementRef | undefined;
+
+  @ViewChild('lastMessage') set content(content: ElementRef) {
+    const box = this.messageBox?.nativeElement as HTMLElement | undefined;
+
+    if (!!box) {
+      if (this.isUserAtTheBottom) {
+        const scrollHeight = box.scrollHeight;
+        box.scroll({ top: scrollHeight });
+      }
+    }
+  }
+
+  constructor(public _chatService: ChatService) {}
 
   ngOnInit(): void {
-    this._chatService.startConnection();
-    this.messages = this._chatService.messages;
+    const box = this.messageBox?.nativeElement as any;
+  }
+
+  onScroll(event: any) {
+    this.isUserAtTheBottom =
+      event.target.offsetHeight + event.target.scrollTop ===
+      event.target.scrollHeight;
   }
 
   resize(e: any) {
@@ -39,11 +59,9 @@ export class ChatBoxComponent {
     }
 
     this._chatService.sendMessage(value);
-
     this.messageFormControl.reset();
+    // this.messages = this._chatService.messages;
 
-    this.messages = this._chatService.messages;
-
-    console.log('messages: ', this.messages);
+    // console.log('messages: ', this.messages);
   }
 }

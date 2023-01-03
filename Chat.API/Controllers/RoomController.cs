@@ -24,6 +24,14 @@ namespace Chat.API.Controllers
             return await _roomService.GetRooms();
         }
 
+
+        [HttpGet, Route("")]
+        public async Task<RoomsResponse> GetRoomDetails([FromRoute] int roomId)
+        {
+            return await _roomService.GetRooms();
+        }
+
+
         [HttpPost, Route("")]
         public async Task<bool> CreateRoom([FromBody] RoomRequest request)
         {

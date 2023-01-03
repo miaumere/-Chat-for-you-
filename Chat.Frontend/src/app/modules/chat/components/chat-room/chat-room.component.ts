@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BaseComponent } from 'src/app/core/base.component';
+import { ChatService } from 'src/app/core/services/chat.service';
 import { IRoomDetailsDto } from 'src/app/core/services/models/room-details-dto';
 import { RoomService } from 'src/app/core/services/room.service';
 
@@ -14,11 +15,23 @@ export class ChatRoomComponent extends BaseComponent implements OnInit {
     name: 'Room 1 ',
   };
 
-  constructor(private _roomService: RoomService) {
+  messages: string[] = [];
+
+  constructor(
+    private _roomService: RoomService,
+    public _chatService: ChatService
+  ) {
     super();
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this._chatService.startConnection();
+
+    this._chatService.messages$.subscribe((messages) => {
+      console.log('new messages', messages);
+      this.messages = [...messages];
+    });
+  }
 
   getRoomDetails() {
     // this.subscriptions$.add(
