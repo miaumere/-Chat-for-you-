@@ -12,6 +12,7 @@ import { ChatService } from 'src/app/core/services/chat.service';
 import { IMessage } from 'src/app/core/services/models/message.model';
 import { BehaviorSubject } from 'rxjs';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-chat-box [user] [messages]',
@@ -38,7 +39,10 @@ export class ChatBoxComponent {
     }
   }
 
-  constructor(private _chatService: ChatService) {}
+  constructor(
+    private _chatService: ChatService,
+    private _route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {}
 
@@ -58,9 +62,12 @@ export class ChatBoxComponent {
     if (!this.messageFormControl.valid || !value) {
       return;
     }
+    const roomId = this._route.snapshot.paramMap.get('id');
 
-    console.log('username: ');
-    this._chatService.sendMessage(value, this.user);
-    this.messageFormControl.reset();
+    if (roomId) {
+      this._chatService.sendMessage(value, roomId);
+      // this._chatService.sendMessage(value);
+      this.messageFormControl.reset();
+    }
   }
 }

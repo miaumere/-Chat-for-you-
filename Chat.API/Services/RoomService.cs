@@ -1,5 +1,6 @@
 ﻿using Chat.API.Models;
 using Chat.API.Persistance;
+using Chat.API.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,13 +17,6 @@ namespace Chat.API.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
-
-        public int GetUserIdFromHttpContext()
-        {
-            var userIdFromHttpContext = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
-            return Convert.ToInt32(userIdFromHttpContext);
-        }
-
         public async Task<RoomsResponse> GetRooms()
         {
             var response = new RoomsResponse();
@@ -32,7 +26,7 @@ namespace Chat.API.Services
                 .Include(r => r.CreatedBy)
                 .ToListAsync();
 
-            int userId = GetUserIdFromHttpContext();
+            int userId = Utils.Utils.GetUserIdFromHttpContext(_httpContextAccessor);
 
             foreach (var roomFromDb in roomsFromDb)
             {
@@ -67,7 +61,7 @@ namespace Chat.API.Services
 
         public async Task<bool> CreateRoom(RoomRequest roomRequest)
         {
-            int userId = GetUserIdFromHttpContext();
+            int userId = Utils.Utils.GetUserIdFromHttpContext(_httpContextAccessor);
 
             var user = await _apiDbContext
                 .Users
@@ -91,7 +85,7 @@ namespace Chat.API.Services
         public async Task<bool> DeleteRoom(int roomId)
         {
 
-            int userId = GetUserIdFromHttpContext();
+            int userId = Utils.Utils.GetUserIdFromHttpContext(_httpContextAccessor);
 
             var roomToDelete = await _apiDbContext.Rooms
                 .Include(r => r.CreatedBy)

@@ -48,9 +48,6 @@ namespace Chat.API.Services
             }
 
             var token = CreateCookieWithJWTTokenForUser(userEntity);
-
-            var userResponse = new UserDto(userEntity, token);
-
             return token;
         }
 

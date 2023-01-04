@@ -35,12 +35,11 @@ export class ChatService {
     });
   }
 
-  async sendMessage(message: string, user: UserDto | undefined) {
-    if (!user) {
-      console.error('no user');
-      return;
-    }
-
-    await this.connection.invoke('ProcessMessage', message, user.id);
+  async sendMessage(message: string, roomId: string) {
+    await this.connection.invoke('ProcessMessage', message, roomId);
   }
+
+  // async sendMessage(message: string) {
+  //   await this.connection.invoke('ProcessMessage', message);
+  // }
 }
