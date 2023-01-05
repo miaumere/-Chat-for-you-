@@ -1,7 +1,8 @@
 import { UserDto } from './user.model';
 
 export interface IMessage {
-  author: UserDto;
-  date: Date;
+  sentBy: UserDto;
+  sentDate: Date;
+
   content: string | null;
 }

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace Chat.API.Hubs
 {
@@ -11,7 +12,8 @@ namespace Chat.API.Hubs
     {
         private IHttpContextAccessor _httpContextAccessor { get; init; }
         private ApiDbContext _apiDbContext { get; init; }
-        private static readonly List<UserDto> Users = new List<UserDto>();
+
+        private static readonly Dictionary<string, List<UserDto>> RoomsWithUsers = new Dictionary<string, List<UserDto>>();
 
         public ChatHub(ApiDbContext apiDbContext, IHttpContextAccessor httpContextAccessor)
         {
@@ -19,56 +21,93 @@ namespace Chat.API.Hubs
             _httpContextAccessor = httpContextAccessor;
         }
 
-        private User? GetUserFromHttpContext()
+        private async Task<User?> GetUserFromHttpContext()
         {
             int userId = Utils.Utils.GetUserIdFromHttpContext(_httpContextAccessor);
-            var userDto = _apiDbContext.Users
+            var user = await _apiDbContext.Users
                 .Where(u => u.Id == userId)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
-            return userDto;
+            return user;
         }
+
+        private async Task<Room?> GetRoomFromId(string roomId)
+        {
+            int roomIdConverted = Convert.ToInt32(roomId);
+            var room = await _apiDbContext.Rooms
+                .Where(r => r.Id == roomIdConverted)
+                .FirstOrDefaultAsync();
+
+            return room;
+        }
+
         public override Task OnConnectedAsync()
         {
-            Users.Add(new UserDto(GetUserFromHttpContext()));
-            Console.WriteLine("OnConnectedAsync");
             return base.OnConnectedAsync();
         }
 
-        //public async void ProcessMessage(string message, string roomId)
-        public async void ProcessMessage(string message, string roomId)
+        public async Task EnterRoom(string roomId)
         {
-            Console.WriteLine(message);
-            var roomIdConverted = Convert.ToInt32(roomId);
-            var user = GetUserFromHttpContext();
+            var user = await GetUserFromHttpContext();
+            var userDto = new UserDto(user);
 
-            var room = _apiDbContext.Rooms
-                .Where(u => u.Id == roomIdConverted)
-                .FirstOrDefault();
+            RoomsWithUsers.TryGetValue(roomId, out var currentRoomUsers);
+
+            if (currentRoomUsers is null)
+            {
+                RoomsWithUsers.TryAdd(roomId, new List<UserDto>() { userDto });
+            }
+            else
+            {
+                var isCurrentUserAlreadyExist = currentRoomUsers.Any(x => x.Id == userDto.Id);
+
+                if (isCurrentUserAlreadyExist == false)
+                {
+                    currentRoomUsers.Add(userDto);
+                }
+            }
+
+            RoomsWithUsers.TryGetValue(roomId, out var usersList);
+
+            await Clients.All.SendAsync("GetRoomWithUsers", usersList);
+        }
+
+        public async Task LeaveRoom(string roomId)
+        {
+            var user = await GetUserFromHttpContext();
+            var userDto = new UserDto(user);
+
+            RoomsWithUsers.TryGetValue(roomId, out var usersList);
+
+            if (userDto != null)
+                usersList.Remove(userDto);
+
+            await Clients.All.SendAsync("GetRoomWithUsers", usersList);
+        }
+
+        public async Task ProcessMessage(string message, string roomId)
+        {
+            var user = await GetUserFromHttpContext();
+
+            var room = await GetRoomFromId(roomId);
 
             var messageEntity = new Message { SentBy = user, Room = room, SentDate = DateTime.UtcNow, Content = message };
-            //await _apiDbContext.SaveChangesAsync();
+            await _apiDbContext.Messages.AddAsync(messageEntity);
+            await _apiDbContext.SaveChangesAsync();
 
             var messageDto = new MessageDto(messageEntity);
-            //JsonConvert.SerializeObject(messageDto);
-
 
             await Clients.All.SendAsync("ReceiveMessage", messageDto);
         }
 
-        public async Task SendMessageToAll()
-        {
-            await Clients.All.SendAsync("xxxx");
-        }
 
-        public async Task OnDisconnectedAsync()
+        public override async Task OnDisconnectedAsync(Exception exception)
         {
-            var userDto = new UserDto(GetUserFromHttpContext());
-            if (userDto != null)
-            Users.Remove(userDto);
+
             Console.WriteLine("bye");
 
-            await Clients.All.SendAsync("Disconnected", Context.ConnectionId);
+            await Clients.All.SendAsync("Disconnect", Context.ConnectionId);
+            await base.OnDisconnectedAsync(exception);
         }
 
     }

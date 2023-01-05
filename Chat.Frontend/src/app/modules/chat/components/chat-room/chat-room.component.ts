@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BaseComponent } from 'src/app/core/base.component';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { ChatService } from 'src/app/core/services/chat.service';
+import { IMessage } from 'src/app/core/services/models/message.model';
 import { UserDto } from 'src/app/core/services/models/user.model';
 import { RoomService } from 'src/app/core/services/room.service';
 
@@ -11,10 +12,15 @@ import { RoomService } from 'src/app/core/services/room.service';
   templateUrl: './chat-room.component.html',
   styleUrls: ['./chat-room.component.scss'],
 })
-export class ChatRoomComponent extends BaseComponent implements OnInit {
+export class ChatRoomComponent
+  extends BaseComponent
+  implements OnInit, OnDestroy
+{
   name: string = '';
   user?: UserDto;
-  messages: string[] = [];
+  messages: IMessage[] = [];
+
+  roomId: string = '';
 
   constructor(
     private _chatService: ChatService,
@@ -26,28 +32,31 @@ export class ChatRoomComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this._authService.user$.subscribe((user) => {
-      if (user) this.user = user;
-    });
+    this.roomId = '' + this._route.snapshot.paramMap.get('id');
+    if (!!this.roomId) {
+      this._authService.user$.subscribe((user) => {
+        if (user) this.user = user;
+      });
 
-    this._chatService.startConnection();
+      this.getRoomDetails(+this.roomId);
+      this._chatService.startConnection(this.roomId);
 
-    this.getRoomDetails();
-
-    this._chatService.messages$.subscribe((messages) => {
-      this.messages = [...messages];
-    });
+      this._chatService.messages$.subscribe((messages) => {
+        this.messages = [...messages];
+      });
+    }
   }
 
-  getRoomDetails() {
-    const roomId = this._route.snapshot.paramMap.get('id');
+  getRoomDetails(roomId: number) {
+    this.subscriptions$.add(
+      this._roomService.getRoomById(roomId).subscribe((room) => {
+        this.name = room.name;
+      })
+    );
+  }
 
-    if (!!roomId) {
-      this.subscriptions$.add(
-        this._roomService.getRoomById(+roomId).subscribe((room) => {
-          this.name = room.name;
-        })
-      );
-    }
+  override ngOnDestroy(): void {
+    this.subscriptions$.unsubscribe();
+    this._chatService.closeConnection(this.roomId);
   }
 }

@@ -4,6 +4,8 @@ import {
   Component,
   ElementRef,
   Input,
+  Pipe,
+  PipeTransform,
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
@@ -14,6 +16,13 @@ import { BehaviorSubject } from 'rxjs';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { ActivatedRoute } from '@angular/router';
 
+@Pipe({ name: 'plusOne', standalone: true })
+export class PlusOnePipe implements PipeTransform {
+  transform(value: number): number {
+    return value + 1;
+  }
+}
+
 @Component({
   selector: 'app-chat-box [user] [messages]',
   templateUrl: './chat-box.component.html',
@@ -23,7 +32,7 @@ export class ChatBoxComponent {
   messageFormControl = new FormControl('', [Validators.min(1)]);
   isUserAtTheBottom = true;
 
-  @Input() messages: string[] = [];
+  @Input() messages: IMessage[] = [];
   @Input() user?: UserDto;
 
   @ViewChild('messageBox', { static: true }) messageBox: ElementRef | undefined;
@@ -38,6 +47,8 @@ export class ChatBoxComponent {
       }
     }
   }
+
+  count = 0;
 
   constructor(
     private _chatService: ChatService,
@@ -66,8 +77,23 @@ export class ChatBoxComponent {
 
     if (roomId) {
       this._chatService.sendMessage(value, roomId);
-      // this._chatService.sendMessage(value);
       this.messageFormControl.reset();
     }
+  }
+
+  hasTheSameAuthorAsLastMessage(i: number): boolean {
+    if (!Array.isArray(this.messages) || this.messages.length <= 0) {
+      return true;
+    }
+
+    const lastMessage = this.messages[i - 1];
+    const currentMessage = this.messages[i];
+
+    if (!lastMessage) {
+      // console.warn('no last');
+      return true;
+    }
+
+    return lastMessage.sentBy.username !== currentMessage.sentBy.username;
   }
 }

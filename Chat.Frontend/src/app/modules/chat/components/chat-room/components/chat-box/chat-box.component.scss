@@ -64,3 +64,10 @@ $messages-text-size: 0.8rem;
 .message-content {
   margin-top: 0.5rem;
 }
+
+.profile-pic {
+  opacity: 1;
+  &--hidden {
+    opacity: 0;
+  }
+}

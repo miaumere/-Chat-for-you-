@@ -1,16 +1,28 @@
+<!-- <div>{{ count | plusOne }}</div> -->
+<!-- <button (click)="count = count + 1">Increase</button> -->
+
 <div class="chat-box">
   <div class="messages" #messageBox (scroll)="onScroll($event)">
-    <div class="messages__item" *ngFor="let message of messages" #lastMessage>
-      {{ message }}
+    <div
+      class="messages__item"
+      *ngFor="let message of messages; index as i"
+      #lastMessage
+    >
+      <app-profile-pic
+        [username]="message.sentBy.username"
+        class="profile-pic"
+        [ngClass]="{ 'profile-pic--hidden': !hasTheSameAuthorAsLastMessage(i) }"
+      ></app-profile-pic>
 
-      <!-- <app-profile-pic [username]="message.author.username"></app-profile-pic>
       <div class="chat-box-name-and-content">
-        <div>
-          <span class="name">{{ message.author.username }}</span>
-          <span class="message-date">{{ message.date | date : "medium" }}</span>
+        <div *ngIf="hasTheSameAuthorAsLastMessage(i)">
+          <span class="name">{{ message.sentBy.username }}</span>
+          <span class="message-date">{{
+            message.sentDate | date : "medium"
+          }}</span>
         </div>
         <div class="message-content">{{ message.content }}</div>
-      </div> -->
+      </div>
     </div>
   </div>
   <div class="new-message">
