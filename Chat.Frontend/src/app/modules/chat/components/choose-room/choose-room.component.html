@@ -17,10 +17,17 @@
     <div class="container__title">rooms created by me:</div>
     <ng-container *ngIf="roomsCreatedByMe.length > 0">
       <div class="room" *ngFor="let room of roomsCreatedByMe">
-        <span>
-          <span class="icon" (click)="deleteRoom(room.id)">❌</span>
-          {{ room.name }}</span
-        >
+        <div class="room__icons">
+          <span class="icon delete-icon" (dblclick)="deleteRoom(room.id)"
+            >❌</span
+          >
+          <!-- <span class="icon">🔓🔐</span> -->
+          <select class="available-colors-select">
+            <option *ngFor="let color of availableColors">{{ color }}</option>
+          </select>
+        </div>
+        {{ room.name }}
+
         <span class="icon" [routerLink]="['./', room.id]">➡️</span>
       </div>
     </ng-container>
