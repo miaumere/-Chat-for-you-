@@ -49,8 +49,9 @@ namespace Chat.API.Hubs
                 .Include(m => m.SentBy)
                 .Include(m => m.Room)
                 .Where(m => m.Room.Id == roomIdConverted)
-                .OrderBy(m => m.SentDate)
+                .OrderByDescending(m => m.SentDate)
                 .Take(10)
+                .Reverse()
                 .Select(m => new MessageDto(m))
                 .ToListAsync();
 
