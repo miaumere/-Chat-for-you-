@@ -41,6 +41,23 @@ namespace Chat.API.Hubs
             return room;
         }
 
+        private async Task<List<MessageDto>> GetLastMessages(string roomId)
+        {
+            var messages = new List<MessageDto>();
+            int roomIdConverted = Convert.ToInt32(roomId);
+            var messagesFromDb = await _apiDbContext.Messages
+                .Include(m => m.SentBy)
+                .Include(m => m.Room)
+                .Where(m => m.Room.Id == roomIdConverted)
+                .OrderBy(m => m.SentDate)
+                .Take(10)
+                .Select(m => new MessageDto(m))
+                .ToListAsync();
+
+            messagesFromDb.ForEach(m => messages.Add(m));
+
+            return messages;
+        }
         public override Task OnConnectedAsync()
         {
             return base.OnConnectedAsync();
@@ -50,7 +67,6 @@ namespace Chat.API.Hubs
         {
             var user = await GetUserFromHttpContext();
             var userDto = new UserDto(user);
-
 
             await Groups.AddToGroupAsync(Context.ConnectionId, roomId);
 
@@ -69,11 +85,12 @@ namespace Chat.API.Hubs
                     currentRoomUsers.Add(userDto);
                 }
             }
-
             RoomsWithUsers.TryGetValue(roomId, out var usersList);
 
+            
+            await Clients.Groups(roomId).SendAsync("GetRoomWithUsers", usersList);            
+            await Clients.Groups(roomId).SendAsync("GetLastMessages", await GetLastMessages(roomId));
 
-            await Clients.Groups(roomId).SendAsync("GetRoomWithUsers", usersList);
         }
 
         public async Task LeaveRoom(string roomId)
@@ -87,7 +104,6 @@ namespace Chat.API.Hubs
 
             if (userDto != null)
                 usersList.RemoveAll(u => u.Id == userDto.Id);
-
 
             await Clients.Groups(roomId).SendAsync("GetRoomWithUsers", usersList);
         }
@@ -111,6 +127,5 @@ namespace Chat.API.Hubs
             await Clients.All.SendAsync("Disconnect", Context.ConnectionId);
             await base.OnDisconnectedAsync(exception);
         }
-
     }
 }

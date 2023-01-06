@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 import * as signalR from '@microsoft/signalr';
 import { getUserFromJWT } from '../utils/get-user-from-jwt.function';
 
-type events = 'GetRoomWithUsers' | 'ReceiveMessage';
+type events = 'GetRoomWithUsers' | 'ReceiveMessage' | 'GetLastMessages';
 
 @Injectable({ providedIn: 'root' })
 export class ChatService {
@@ -20,8 +20,15 @@ export class ChatService {
     [
       'GetRoomWithUsers',
       (usersInRoom: UserDto[]) => {
-        console.log('GetRoomWithUsers: ', usersInRoom);
         this.usersInRoom$.next(usersInRoom);
+      },
+    ],
+    [
+      'GetLastMessages',
+      (messages: IMessage[]) => {
+        console.log('last 10 messages: ', messages);
+        this.messages$.next(messages);
+        this.messages.push(...messages);
       },
     ],
     [
@@ -29,7 +36,6 @@ export class ChatService {
       (msg: IMessage) => {
         this.messages.push(msg);
         this.messages$.next(this.messages);
-        console.log('messages: ', this.messages);
       },
     ],
   ]);
