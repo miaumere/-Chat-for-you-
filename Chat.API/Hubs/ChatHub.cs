@@ -51,6 +51,9 @@ namespace Chat.API.Hubs
             var user = await GetUserFromHttpContext();
             var userDto = new UserDto(user);
 
+
+            await Groups.AddToGroupAsync(Context.ConnectionId, roomId);
+
             RoomsWithUsers.TryGetValue(roomId, out var currentRoomUsers);
 
             if (currentRoomUsers is null)
@@ -69,7 +72,8 @@ namespace Chat.API.Hubs
 
             RoomsWithUsers.TryGetValue(roomId, out var usersList);
 
-            await Clients.All.SendAsync("GetRoomWithUsers", usersList);
+
+            await Clients.Groups(roomId).SendAsync("GetRoomWithUsers", usersList);
         }
 
         public async Task LeaveRoom(string roomId)
@@ -77,18 +81,20 @@ namespace Chat.API.Hubs
             var user = await GetUserFromHttpContext();
             var userDto = new UserDto(user);
 
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, roomId);
+
             RoomsWithUsers.TryGetValue(roomId, out var usersList);
 
             if (userDto != null)
-                usersList.Remove(userDto);
+                usersList.RemoveAll(u => u.Id == userDto.Id);
 
-            await Clients.All.SendAsync("GetRoomWithUsers", usersList);
+
+            await Clients.Groups(roomId).SendAsync("GetRoomWithUsers", usersList);
         }
 
         public async Task ProcessMessage(string message, string roomId)
         {
             var user = await GetUserFromHttpContext();
-
             var room = await GetRoomFromId(roomId);
 
             var messageEntity = new Message { SentBy = user, Room = room, SentDate = DateTime.UtcNow, Content = message };
@@ -97,15 +103,11 @@ namespace Chat.API.Hubs
 
             var messageDto = new MessageDto(messageEntity);
 
-            await Clients.All.SendAsync("ReceiveMessage", messageDto);
+            await Clients.Groups(roomId).SendAsync("ReceiveMessage", messageDto);
         }
-
 
         public override async Task OnDisconnectedAsync(Exception exception)
         {
-
-            Console.WriteLine("bye");
-
             await Clients.All.SendAsync("Disconnect", Context.ConnectionId);
             await base.OnDisconnectedAsync(exception);
         }

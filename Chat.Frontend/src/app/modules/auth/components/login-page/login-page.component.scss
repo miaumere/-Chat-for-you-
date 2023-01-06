@@ -14,7 +14,8 @@
   select {
     font-size: 1rem;
     height: 3rem;
-    width: 25rem;
+    width: 100%;
+    max-width: 25rem;
 
     margin: 0.5rem;
   }

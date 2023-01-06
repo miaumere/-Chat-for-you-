@@ -63,6 +63,8 @@ export class ChatService {
   async closeConnection(roomId: string) {
     await this.connection.invoke('LeaveRoom', roomId);
 
+    this.usersInRoom$.next([]);
+
     await this.connection.stop();
     this.eventsMap.forEach((_, event) => {
       this.connection.off(event);
