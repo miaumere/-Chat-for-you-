@@ -70,6 +70,8 @@ export class ChatService {
     await this.connection.invoke('LeaveRoom', roomId);
 
     this.usersInRoom$.next([]);
+    this.messages$.next([]);
+    this.messages = [];
 
     await this.connection.stop();
     this.eventsMap.forEach((_, event) => {

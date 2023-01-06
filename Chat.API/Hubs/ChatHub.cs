@@ -55,7 +55,6 @@ namespace Chat.API.Hubs
                 .ToListAsync();
 
             messagesFromDb.ForEach(m => messages.Add(m));
-
             return messages;
         }
         public override Task OnConnectedAsync()
