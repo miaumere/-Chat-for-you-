@@ -26,7 +26,6 @@ export class ChatService {
     [
       'GetLastMessages',
       (messages: IMessage[]) => {
-        console.log('last 10 messages: ', messages);
         this.messages$.next(messages);
         this.messages.push(...messages);
       },

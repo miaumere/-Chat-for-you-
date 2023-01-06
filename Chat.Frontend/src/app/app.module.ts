@@ -9,21 +9,20 @@ import { AuthGuard } from './core/services/auth-guard.service';
 
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Interceptor } from './core/services/interceptor';
-
-function initializeApp(): void {}
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [AppComponent, FooterComponent],
-  imports: [BrowserModule, AppRoutingModule, SharedModule, HttpClientModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    SharedModule,
+    HttpClientModule,
+    BrowserAnimationsModule,
+  ],
   bootstrap: [AppComponent],
   providers: [
-    {
-      provide: APP_INITIALIZER,
-      useFactory: () => initializeApp,
-      multi: true,
-    },
     AuthGuard,
-
     { provide: HTTP_INTERCEPTORS, useClass: Interceptor, multi: true },
   ],
 })
