@@ -12,6 +12,7 @@ import { RoomService } from 'src/app/core/services/room.service';
   styleUrls: ['./choose-room.component.scss'],
 })
 export class ChooseRoomComponent extends BaseComponent implements OnInit {
+  readonly Object = Object;
   readonly availableColors: string[] = [
     '🔴',
     '🟠',
@@ -19,8 +20,17 @@ export class ChooseRoomComponent extends BaseComponent implements OnInit {
     '🟢',
     '🔵',
     '🟣',
-    '⚫',
-    '⚪',
+    '⭕',
+  ];
+
+  readonly availableColorsMap = [
+    { colorName: 'Red', value: '🔴' },
+    { colorName: 'Orange', value: '🟠' },
+    { colorName: 'Yellow', value: '🟡' },
+    { colorName: 'Green', value: '🟢' },
+    { colorName: 'Blue', value: '🔵' },
+    { colorName: 'Purple', value: '🟣' },
+    { colorName: 'Transparent', value: '⭕' },
   ];
 
   createNewForm = new FormGroup({

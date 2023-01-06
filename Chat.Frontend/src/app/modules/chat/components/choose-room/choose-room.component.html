@@ -14,7 +14,6 @@
       </button>
     </form>
 
-    <div class="container__title">rooms created by me:</div>
     <ng-container *ngIf="roomsCreatedByMe.length > 0">
       <div class="room" *ngFor="let room of roomsCreatedByMe">
         <div class="room__icons">
@@ -23,7 +22,12 @@
           >
           <!-- <span class="icon">🔓🔐</span> -->
           <select class="available-colors-select">
-            <option *ngFor="let color of availableColors">{{ color }}</option>
+            <option
+              *ngFor="let color of availableColorsMap"
+              [value]="color.colorName"
+            >
+              {{ color.value }}
+            </option>
           </select>
         </div>
         {{ room.name }}
@@ -35,6 +39,8 @@
 
   <div class="container container--other-rooms">
     <ng-container *ngIf="roomsCreatedByOthers.length > 0">
+      <div class="container__title">rooms created by others:</div>
+
       <div class="room" *ngFor="let room of roomsCreatedByOthers">
         <span>{{ room.name }}</span>
         <span class="icon" [routerLink]="['./', room.id]">➡️</span>
