@@ -1,7 +1,7 @@
 ﻿namespace Chat.API.Models
 {
-    public class RoomRequest
+    public class RoomRequest: RoomDto
     {
-        public string Name { get; set; } = "";
+        public string? Password { get; set; }
     }
 }

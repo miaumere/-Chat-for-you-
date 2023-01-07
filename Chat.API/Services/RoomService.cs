@@ -73,9 +73,7 @@ namespace Chat.API.Services
                 return false;
             }
 
-            var room = new Room();
-            room.CreatedBy = user;
-            room.Name = roomRequest.Name;
+            var room = new Room() {CreatedBy = user, Name = roomRequest.Name };
 
             _apiDbContext.Add(room);
             await _apiDbContext.SaveChangesAsync();

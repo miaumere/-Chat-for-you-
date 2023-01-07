@@ -2,15 +2,36 @@
 
 <div class="choose-room-container">
   <div class="container container--my-rooms">
-    <div class="container__title">my rooms:</div>
+    <div class="container__title">My rooms:</div>
 
     <form [formGroup]="createNewForm">
-      <label>
-        new room name:
-        <input type="text" formControlName="chatRoomName" />
-      </label>
+      <label for="new-room"> New room name: </label>
+      <div class="room-block">
+        <div class="room-with-options">
+          <div class="room-options">
+            <select class="available-colors-select">
+              <option
+                *ngFor="let color of availableColorsMap"
+                [value]="color.colorName"
+              >
+                {{ color.value }}
+              </option>
+            </select>
+            <div class="icon">🔓</div>
+          </div>
+
+          <input
+            id="new-room"
+            type="text"
+            formControlName="chatRoomName"
+            placeholder="Enter room name..."
+          />
+        </div>
+        <div class="room-privacy">This room is public</div>
+      </div>
+
       <button class="button button--create-new-room" (click)="createRoom()">
-        ➕ create new room
+        ➕ Create new room
       </button>
     </form>
 
@@ -39,15 +60,16 @@
 
   <div class="container container--other-rooms">
     <ng-container *ngIf="roomsCreatedByOthers.length > 0">
-      <div class="container__title">rooms created by others:</div>
+      <div class="container__title">Rooms created by others:</div>
 
       <div class="room" *ngFor="let room of roomsCreatedByOthers">
+        {{ availableColorsMap[+room.color].value }}
         <span>{{ room.name }}</span>
         <span class="icon" [routerLink]="['./', room.id]">➡️</span>
       </div>
     </ng-container>
     <span *ngIf="roomsCreatedByOthers.length == 0" class="no-available-rooms">
-      no available rooms <br />
+      No available rooms <br />
       created by others
     </span>
   </div>
