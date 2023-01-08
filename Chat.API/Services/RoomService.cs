@@ -26,13 +26,15 @@ namespace Chat.API.Services
                 .Rooms
                 .Include(r => r.CreatedBy)
                 .Where(r => r.CreatedBy.Id == userId)
+                .OrderBy(r => r.Name)
                 .Select(r => new RoomDto(r))
                 .ToListAsync();
 
             var otherRooms = await _apiDbContext
                 .Rooms
                 .Include(r => r.CreatedBy)
-                 .Where(r => r.CreatedBy.Id != userId)
+                .Where(r => r.CreatedBy.Id != userId)
+                .OrderBy(r => r.Name)
                 .Select(r => new RoomDto(r))
                 .ToListAsync();
 
