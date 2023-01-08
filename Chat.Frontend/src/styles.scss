@@ -123,3 +123,81 @@ select {
 .icon {
   cursor: pointer;
 }
+
+:root.light {
+  .Red {
+    background: #ff9f9f !important;
+    &--secondary {
+      background: #ffc0c0 !important;
+    }
+  }
+  .Orange {
+    background: #ffd29f !important;
+    &--secondary {
+      background: #ffeec0 !important;
+    }
+  }
+  .Yellow {
+    background: #fff99f !important;
+    &--secondary {
+      background: #fbffc9 !important;
+    }
+  }
+  .Green {
+    background: #9fffc7 !important;
+    &--secondary {
+      background: #d7ffc0 !important;
+    }
+  }
+  .Blue {
+    background: #9fa6ff !important;
+    &--secondary {
+      background: #c0e1ff !important;
+    }
+  }
+  .Purple {
+    background: #c49fff !important;
+    &--secondary {
+      background: #e6c0ff !important;
+    }
+  }
+}
+
+:root.dark {
+  .Red {
+    background: #380507 !important;
+    &--secondary {
+      background: #680e1a !important;
+    }
+  }
+  .Orange {
+    background: #522608 !important;
+    &--secondary {
+      background: #754211 !important;
+    }
+  }
+  .Yellow {
+    background: #382a05 !important;
+    &--secondary {
+      background: #685b0e !important;
+    }
+  }
+  .Green {
+    background: #04362a !important;
+    &--secondary {
+      background: #12443d !important;
+    }
+  }
+  .Blue {
+    background: #07083d !important;
+    &--secondary {
+      background: #2d2968 !important;
+    }
+  }
+  .Purple {
+    background: #250538 !important;
+    &--secondary {
+      background: #4f0e68 !important;
+    }
+  }
+}

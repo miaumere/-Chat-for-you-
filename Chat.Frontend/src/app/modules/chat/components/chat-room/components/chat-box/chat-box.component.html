@@ -1,7 +1,4 @@
-<!-- <div>{{ count | plusOne }}</div> -->
-<!-- <button (click)="count = count + 1">Increase</button> -->
-
-<div class="chat-box">
+<div class="chat-box" [ngClass]="room?.color + '--secondary'">
   <div class="messages" #messageBox (scroll)="onScroll($event)">
     <div
       class="messages__item"

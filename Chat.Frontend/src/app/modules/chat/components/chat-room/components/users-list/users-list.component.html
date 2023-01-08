@@ -1,4 +1,4 @@
-<aside class="users-list-panel">
+<aside class="users-list-panel" [ngClass]="room?.color">
   <p class="users-list-panel__title">
     available ({{ (users$ | async)?.length }})
   </p>

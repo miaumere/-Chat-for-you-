@@ -15,6 +15,7 @@ import { IMessage } from 'src/app/core/services/models/message.model';
 import { BehaviorSubject } from 'rxjs';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { ActivatedRoute } from '@angular/router';
+import { RoomDto } from 'src/app/core/services/models/room-dto.model';
 
 @Pipe({ name: 'plusOne', standalone: true })
 export class PlusOnePipe implements PipeTransform {
@@ -24,7 +25,7 @@ export class PlusOnePipe implements PipeTransform {
 }
 
 @Component({
-  selector: 'app-chat-box [user] [messages]',
+  selector: 'app-chat-box [user] [messages] [room]',
   templateUrl: './chat-box.component.html',
   styleUrls: ['./chat-box.component.scss'],
 })
@@ -32,6 +33,7 @@ export class ChatBoxComponent {
   messageFormControl = new FormControl('', [Validators.min(1)]);
   isUserAtTheBottom = true;
 
+  @Input() room?: RoomDto;
   @Input() messages: IMessage[] = [];
   @Input() user?: UserDto;
 
