@@ -1,3 +1,3 @@
-export interface IRoomRequest {
-  name: string;
-}
+import { IRoomDto } from './room-dto.model';
+
+export type IRoomRequest = Omit<IRoomDto, 'isPrivate'> & { password: string };

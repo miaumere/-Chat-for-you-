@@ -7,4 +7,5 @@ import { Component, Input } from '@angular/core';
 })
 export class ProfilePicComponent {
   @Input() username: string = '';
+  @Input() size?: string = '35px';
 }

@@ -1,4 +1,5 @@
-﻿using Chat.API.Models;
+﻿using Chat.API.Enums;
+using Chat.API.Models;
 using Chat.API.Persistance;
 using Chat.API.Utils;
 using Microsoft.AspNetCore.Http;
@@ -17,35 +18,30 @@ namespace Chat.API.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<RoomsResponse> GetRooms()
+        public async Task<List<RoomDto>> GetRooms()
         {
-            var response = new RoomsResponse();
-
-            var roomsFromDb = await _apiDbContext
-                .Rooms
-                .Include(r => r.CreatedBy)
-                .ToListAsync();
-
             int userId = Utils.Utils.GetUserIdFromHttpContext(_httpContextAccessor);
 
-            foreach (var roomFromDb in roomsFromDb)
-            {
-                var room = new RoomDto(roomFromDb);
-                var id = roomFromDb.CreatedBy.Id;
-                if (roomFromDb.CreatedBy.Id == userId)
-                {
-                    response.RoomsCreatedByMe.Add(room);
-                }
-                else
-                {
-                    response.RoomsCreatedByOthers.Add(room);
-                }
-            }
+            var myRooms = await _apiDbContext
+                .Rooms
+                .Include(r => r.CreatedBy)
+                .Where(r => r.CreatedBy.Id == userId)
+                .Select(r => new RoomDto(r))
+                .ToListAsync();
 
-            return response;
+            var otherRooms = await _apiDbContext
+                .Rooms
+                .Include(r => r.CreatedBy)
+                 .Where(r => r.CreatedBy.Id != userId)
+                .Select(r => new RoomDto(r))
+                .ToListAsync();
+
+            var result = myRooms.Concat(otherRooms).ToList();
+
+            return result;
         }
 
-        public async Task<RoomDto> GetRoomDetailsById(int roomId)
+        public async Task<RoomBaseDto> GetRoomDetailsById(int roomId)
         {
 
             var roomsFromDb = await _apiDbContext
@@ -53,7 +49,7 @@ namespace Chat.API.Services
                 .Where(r => r.Id == roomId)
                 .FirstOrDefaultAsync();
 
-            var response = new RoomDto(roomsFromDb);
+            var response = new RoomBaseDto(roomsFromDb);
             
             return response;
         }
@@ -73,7 +69,10 @@ namespace Chat.API.Services
                 return false;
             }
 
-            var room = new Room() {CreatedBy = user, Name = roomRequest.Name };
+            var room = new Room() { CreatedBy = user, 
+                Name = roomRequest.Name, 
+                Color = (Colors)Enum.Parse(typeof(Colors), roomRequest.Color) 
+            };
 
             _apiDbContext.Add(room);
             await _apiDbContext.SaveChangesAsync();

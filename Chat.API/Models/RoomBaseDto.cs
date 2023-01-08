@@ -4,20 +4,20 @@ using System.Drawing;
 
 namespace Chat.API.Models
 {
-    public class RoomDto: RoomBaseDto
+    public class RoomBaseDto
     {
-        public bool IsPrivate { get; set; } = false;
-        public string Username { get; set; } = "";
-        public RoomDto(Room roomFromDb)
+        public int Id { get; set; }
+        public string Name { get; set; } = "";
+        public string Color { get; set; }
+
+        public RoomBaseDto(Room roomFromDb)
         {
             Id = roomFromDb.Id;
             Name = roomFromDb.Name;
             Color = roomFromDb.Color != null ? roomFromDb.Color.ToString() : Colors.Transparent.ToString();
-            IsPrivate = roomFromDb.RoomPassword != null;
-            Username = roomFromDb.CreatedBy?.Name;
         }
 
-        public RoomDto()
+        public RoomBaseDto()
         {
         }
     }

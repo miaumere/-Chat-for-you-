@@ -2,14 +2,57 @@
 
 <div class="choose-room-container">
   <div class="container container--my-rooms">
-    <div class="container__title">My rooms:</div>
+    <ng-container
+      *ngTemplateOutlet="roomItem; context: { room }"
+    ></ng-container>
+  </div>
 
-    <form [formGroup]="createNewForm">
-      <label for="new-room"> New room name: </label>
+  <div>
+    <div class="container__title">Available rooms:</div>
+
+    <div *ngIf="rooms.length > 0" class="container container--other-rooms">
+      <ng-container *ngFor="let room of rooms">
+        <ng-container
+          *ngTemplateOutlet="roomItem; context: { room }"
+        ></ng-container
+      ></ng-container>
+    </div>
+    <span *ngIf="rooms.length == 0" class="no-available-rooms">
+      No available rooms
+    </span>
+  </div>
+</div>
+
+<ng-template #roomItem let-room="room">
+  <div class="form-container">
+    <div class="icons-container">
+      <div
+        class="icon"
+        *ngIf="(user$ | async)?.username === room.username && room.id"
+        (dblclick)="deleteRoom(room.id)"
+      >
+        ❌
+      </div>
+    </div>
+    <form #form="ngForm" (ngSubmit)="onSubmit(form)">
       <div class="room-block">
         <div class="room-with-options">
           <div class="room-options">
-            <select class="available-colors-select">
+            <app-profile-pic
+              class="profile-pic"
+              [size]="'1rem'"
+              [username]="room.username"
+              *ngIf="room.id"
+            ></app-profile-pic>
+            <select
+              class="available-colors-select"
+              [(ngModel)]="room.color"
+              name="color"
+              *ngIf="
+                (user$ | async)?.username === room.username || !room.id;
+                else colorDot
+              "
+            >
               <option
                 *ngFor="let color of availableColorsMap"
                 [value]="color.colorName"
@@ -17,60 +60,75 @@
                 {{ color.value }}
               </option>
             </select>
-            <div class="icon">🔓</div>
+            <ng-template #colorDot>
+              <div class="room-color-dot">
+                {{ availableColorsMap[+Colors[room.color]].value }}
+              </div>
+            </ng-template>
           </div>
 
           <input
-            id="new-room"
             type="text"
-            formControlName="chatRoomName"
+            name="name"
+            [(ngModel)]="room.name"
             placeholder="Enter room name..."
+            required
+            minlength="3"
+            maxlength="50"
           />
+          <span class="icon" *ngIf="room.id" [routerLink]="['./', room.id]"
+            >➡️</span
+          >
         </div>
-        <div class="room-privacy">This room is public</div>
+        <div class="room-privacy">
+          <ng-container
+            *ngIf="
+              (user$ | async)?.username === room.username || !room.id;
+              else othersRoom
+            "
+          >
+            🔐 Set a password to make this room private:
+            <input
+              type="password"
+              class="new-password-input"
+              placeholder="Type here..."
+              autocomplete="new-password"
+            />
+          </ng-container>
+          <ng-template #othersRoom>
+            <span>
+              <span
+                class="icon-lock"
+                [ngClass]="{ 'icon-lock--locked': room.isPrivate }"
+              >
+                {{ room.isPrivate ? "🔐" : "🔓" }}
+              </span>
+              <span>
+                {{
+                  room.isPrivate
+                    ? " This room is private. Enter password:"
+                    : " This room is public"
+                }}
+              </span>
+            </span>
+            <input
+              type="password"
+              class="new-password-input"
+              placeholder="Type here..."
+              autocomplete="new-password"
+            />
+          </ng-template>
+        </div>
       </div>
-
-      <button class="button button--create-new-room" (click)="createRoom()">
-        ➕ Create new room
+      <button
+        type="submit"
+        class="button button--create-new-room"
+        (click)="upsertRoom(form, room.id)"
+        *ngIf="form.form.dirty || !room.id"
+        [disabled]="!form.form.valid"
+      >
+        ➕ Submit
       </button>
     </form>
-
-    <ng-container *ngIf="roomsCreatedByMe.length > 0">
-      <div class="room" *ngFor="let room of roomsCreatedByMe">
-        <div class="room__icons">
-          <span class="icon delete-icon" (dblclick)="deleteRoom(room.id)"
-            >❌</span
-          >
-          <!-- <span class="icon">🔓🔐</span> -->
-          <select class="available-colors-select">
-            <option
-              *ngFor="let color of availableColorsMap"
-              [value]="color.colorName"
-            >
-              {{ color.value }}
-            </option>
-          </select>
-        </div>
-        {{ room.name }}
-
-        <span class="icon" [routerLink]="['./', room.id]">➡️</span>
-      </div>
-    </ng-container>
   </div>
-
-  <div class="container container--other-rooms">
-    <ng-container *ngIf="roomsCreatedByOthers.length > 0">
-      <div class="container__title">Rooms created by others:</div>
-
-      <div class="room" *ngFor="let room of roomsCreatedByOthers">
-        {{ availableColorsMap[+room.color].value }}
-        <span>{{ room.name }}</span>
-        <span class="icon" [routerLink]="['./', room.id]">➡️</span>
-      </div>
-    </ng-container>
-    <span *ngIf="roomsCreatedByOthers.length == 0" class="no-available-rooms">
-      No available rooms <br />
-      created by others
-    </span>
-  </div>
-</div>
+</ng-template>

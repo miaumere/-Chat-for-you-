@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { delay, map } from 'rxjs';
 import { IRoomRequest } from './models/room-request.model';
-import { RoomsResponse, IRoomsResponse } from './models/rooms-response';
 import { IRoomDto, RoomDto } from './models/room-dto.model';
 
 @Injectable({
@@ -14,9 +13,9 @@ export class RoomService {
   constructor(private http: HttpClient) {}
 
   getRooms() {
-    return this.http.get<RoomsResponse>(`${this._baseUrl}`).pipe(
-      map((response: IRoomsResponse) => {
-        const mappedResponse = new RoomsResponse(response);
+    return this.http.get<RoomDto[]>(`${this._baseUrl}`).pipe(
+      map((response: IRoomDto[]) => {
+        const mappedResponse = response.map((r) => new RoomDto(r));
         return mappedResponse;
       })
     );

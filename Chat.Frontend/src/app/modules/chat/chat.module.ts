@@ -14,6 +14,7 @@ import {
 import { RoomService } from 'src/app/core/services/room.service';
 import { HttpClientModule } from '@angular/common/http';
 import { ChooseRoomComponent } from './components/choose-room/choose-room.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { ChooseRoomComponent } from './components/choose-room/choose-room.compon
     HeaderComponent,
     SharedModule,
     PlusOnePipe,
+    FormsModule,
   ],
   providers: [RoomService],
 })

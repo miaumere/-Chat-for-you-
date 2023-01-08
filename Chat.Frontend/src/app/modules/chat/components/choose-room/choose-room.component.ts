@@ -1,10 +1,15 @@
-import { IRoomRequest } from './../../../../core/services/models/room-request.model';
+import { ColorsString } from './../../../../core/services/enums/color.enum';
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { BaseComponent } from 'src/app/core/base.component';
-import { RoomDto } from 'src/app/core/services/models/room-dto.model';
+import { IRoomDto, RoomDto } from 'src/app/core/services/models/room-dto.model';
 import { RoomService } from 'src/app/core/services/room.service';
+import { Colors } from 'src/app/core/services/enums/color.enum';
+import { IRoomRequest } from 'src/app/core/services/models/room-request.model';
+import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
+import { UserDto } from 'src/app/core/services/models/user.model';
+import { AuthService } from 'src/app/core/services/auth.service';
 
 @Component({
   selector: 'app-choose-room',
@@ -12,6 +17,7 @@ import { RoomService } from 'src/app/core/services/room.service';
   styleUrls: ['./choose-room.component.scss'],
 })
 export class ChooseRoomComponent extends BaseComponent implements OnInit {
+  readonly Colors = Colors;
   readonly availableColorsMap = [
     { colorName: 'Red', value: '🔴' },
     { colorName: 'Orange', value: '🟠' },
@@ -22,29 +28,32 @@ export class ChooseRoomComponent extends BaseComponent implements OnInit {
     { colorName: 'Transparent', value: '⭕' },
   ];
 
-  createNewForm = new FormGroup({
-    chatRoomName: new FormControl(null, [
-      Validators.minLength(3),
-      Validators.maxLength(30),
-    ]),
-  });
+  room: IRoomRequest = {
+    id: 0,
+    name: '',
+    password: '',
+    color: 'Transparent',
+  };
+  rooms: RoomDto[] = [];
 
-  roomsCreatedByMe: RoomDto[] = [];
-  roomsCreatedByOthers: RoomDto[] = [];
+  public user$ = new BehaviorSubject<UserDto | null>(null);
 
-  constructor(private _roomService: RoomService) {
+  constructor(
+    private _roomService: RoomService,
+    private _authService: AuthService
+  ) {
     super();
   }
 
   ngOnInit(): void {
     this.getChatRooms();
+    this.user$ = this._authService.user$;
   }
 
   getChatRooms() {
     this.subscriptions$.add(
-      this._roomService.getRooms().subscribe((roomsResponse) => {
-        this.roomsCreatedByMe = roomsResponse.roomsCreatedByMe;
-        this.roomsCreatedByOthers = roomsResponse.roomsCreatedByOthers;
+      this._roomService.getRooms().subscribe((rooms) => {
+        this.rooms = rooms;
       })
     );
   }
@@ -57,19 +66,26 @@ export class ChooseRoomComponent extends BaseComponent implements OnInit {
     );
   }
 
-  createRoom() {
-    if (!this.createNewForm.valid) {
+  upsertRoom(form: NgForm, roomId: number | null) {
+    if (!form.valid) {
       return;
     }
     const request: IRoomRequest = {
-      name: '' + this.createNewForm.value.chatRoomName,
+      id: roomId,
+      name: '' + form.value.name,
+      color: form.value.color as ColorsString,
+      password: form.value.password,
     };
 
     this.subscriptions$.add(
       this._roomService.createRoom(request).subscribe(() => {
         this.getChatRooms();
-        this.createNewForm.reset();
+        form.reset();
       })
     );
+  }
+
+  onSubmit(form: NgForm) {
+    console.log(form.value);
   }
 }
