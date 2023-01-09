@@ -1,9 +1,10 @@
 ﻿using Chat.API.Enums;
 using Chat.API.Models;
 using Chat.API.Persistance;
-using Chat.API.Utils;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using System.Drawing;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Chat.API.Services
 {
@@ -11,11 +12,22 @@ namespace Chat.API.Services
     {
         private ApiDbContext _apiDbContext { get; init; }
         private IHttpContextAccessor _httpContextAccessor { get; init; }
+        private IConfiguration _configuration { get; init; }
 
-        public RoomService(ApiDbContext apiDbContext, IHttpContextAccessor httpContextAccessor)
+        public RoomService(ApiDbContext apiDbContext, IHttpContextAccessor httpContextAccessor, IConfiguration configuration)
         {
             _apiDbContext = apiDbContext;
             _httpContextAccessor = httpContextAccessor;
+            _configuration = configuration;
+        }
+
+        private string _HashPassword(string secret)
+        {
+            var passKey = _configuration.GetValue<string>("RoomKey");
+            using var sha256 = SHA256.Create();
+            var secretBytes = Encoding.UTF8.GetBytes(secret + passKey);
+            var secretHash = sha256.ComputeHash(secretBytes);
+            return Convert.ToHexString(secretHash);
         }
 
         public async Task<List<RoomDto>> GetRooms()
@@ -57,8 +69,9 @@ namespace Chat.API.Services
         }
 
 
-        public async Task<bool> CreateRoom(RoomRequest roomRequest)
+        public async Task<bool> UpsertRoom(RoomRequest roomRequest)
         {
+
             int userId = Utils.Utils.GetUserIdFromHttpContext(_httpContextAccessor);
 
             var user = await _apiDbContext
@@ -70,13 +83,31 @@ namespace Chat.API.Services
             {
                 return false;
             }
+            Room room; 
+            if (roomRequest?.Id != null) {
+                var existingRoom = await _apiDbContext
+                    .Rooms
+                    .Where(r => r.Id == roomRequest.Id)
+                    .SingleOrDefaultAsync();
+                if(existingRoom == null)
+                {
+                    return false;
+                }
+                existingRoom.Name = roomRequest.Name;
+                existingRoom.RoomPassword = roomRequest.Password != null ? _HashPassword(roomRequest.Password) : null;
+                existingRoom.Color = (Colors)Enum.Parse(typeof(Colors), roomRequest.Color);
+                _apiDbContext.Update(existingRoom);
+            } else
+            {
+                room = new Room() { 
+                    CreatedBy = user, 
+                    Name = roomRequest.Name, 
+                    Color = (Colors)Enum.Parse(typeof(Colors), roomRequest.Color),
+                    RoomPassword = roomRequest.Password != null ? _HashPassword(roomRequest.Password) : null 
+                };           
+                _apiDbContext.Add(room);
+            }
 
-            var room = new Room() { CreatedBy = user, 
-                Name = roomRequest.Name, 
-                Color = (Colors)Enum.Parse(typeof(Colors), roomRequest.Color) 
-            };
-
-            _apiDbContext.Add(room);
             await _apiDbContext.SaveChangesAsync();
             return true;
         }

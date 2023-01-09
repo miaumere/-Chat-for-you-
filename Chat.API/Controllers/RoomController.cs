@@ -35,7 +35,7 @@ namespace Chat.API.Controllers
         [HttpPost, Route("")]
         public async Task<bool> CreateRoom([FromBody] RoomRequest request)
         {
-            return await _roomService.CreateRoom(request);
+            return await _roomService.UpsertRoom(request);
         }
 
         [HttpDelete, Route("")]

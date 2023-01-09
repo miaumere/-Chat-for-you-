@@ -78,7 +78,7 @@ export class ChooseRoomComponent extends BaseComponent implements OnInit {
     };
 
     this.subscriptions$.add(
-      this._roomService.createRoom(request).subscribe(() => {
+      this._roomService.UpsertRoom(request).subscribe(() => {
         this.getChatRooms();
         form.reset();
       })

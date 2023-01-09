@@ -30,7 +30,7 @@ export class RoomService {
     );
   }
 
-  createRoom(request: IRoomRequest) {
+  UpsertRoom(request: IRoomRequest) {
     return this.http.post<boolean>(`${this._baseUrl}`, request);
   }
 

@@ -113,6 +113,7 @@
               </span>
             </span>
             <input
+              *ngIf="room.isPrivate"
               type="password"
               class="new-password-input"
               placeholder="Type here..."
