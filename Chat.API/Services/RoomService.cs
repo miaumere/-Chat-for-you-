@@ -57,14 +57,16 @@ namespace Chat.API.Services
 
         public async Task<RoomBaseDto?> GetRoomDetailsById(int roomId, string password)
         {
+            int userId = Utils.Utils.GetUserIdFromHttpContext(_httpContextAccessor);
 
             var roomFromDb = await _apiDbContext
                 .Rooms
+                .Include(r => r.CreatedBy)
                 .Where(r => r.Id == roomId)
                 .FirstOrDefaultAsync();
 
             if(roomFromDb == null) { return null; }
-            if(roomFromDb.RoomPassword != null)
+            if(roomFromDb.RoomPassword != null && roomFromDb.CreatedBy.Id != userId)
             {
                 byte[] decodedBytes = Convert.FromBase64String(password);
                 string decodedString = Encoding.UTF8.GetString(decodedBytes);
@@ -81,7 +83,6 @@ namespace Chat.API.Services
             return response;
         }
 
-
         public async Task<bool> UpsertRoom(RoomRequest roomRequest)
         {
 
@@ -96,7 +97,14 @@ namespace Chat.API.Services
             {
                 return false;
             }
-            Room room; 
+            Room room;
+
+            string roomPassword = "";            
+            
+            roomPassword = roomRequest?.Password != null 
+                ? _HashPassword(roomRequest.Password) 
+                : null;
+            
             if (roomRequest?.Id != null && roomRequest?.Id != 0) {
                 var existingRoom = await _apiDbContext
                     .Rooms
@@ -107,8 +115,11 @@ namespace Chat.API.Services
                     return false;
                 }
                 existingRoom.Name = roomRequest.Name;
-                existingRoom.RoomPassword = roomRequest.Password != null ? _HashPassword(roomRequest.Password) : null;
                 existingRoom.Color = (Colors)Enum.Parse(typeof(Colors), roomRequest.Color);
+                if (roomRequest.Password != "")
+                {
+                    existingRoom.RoomPassword = roomPassword;
+                }
                 _apiDbContext.Update(existingRoom);
             } else
             {
@@ -116,8 +127,9 @@ namespace Chat.API.Services
                     CreatedBy = user, 
                     Name = roomRequest.Name, 
                     Color = (Colors)Enum.Parse(typeof(Colors), roomRequest.Color),
-                    RoomPassword = roomRequest.Password != null ? _HashPassword(roomRequest.Password) : null 
-                };           
+                    RoomPassword = roomPassword
+            };
+               
                 _apiDbContext.Add(room);
             }
 

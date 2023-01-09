@@ -92,15 +92,33 @@
               else othersRoom
             "
           >
-            🔐 Set a password to make this room private:
+            <span class="room-privacy__info">
+              🔐 Set a password to make this room private. <br />You are the
+              owner - you can visit the room without password. Use this input
+              only for editing:
+            </span>
             <input
-              [(ngModel)]="room.password"
-              type="password"
-              name="password"
-              class="new-password-input"
-              placeholder="Type here..."
-              autocomplete="new-password"
+              type="checkbox"
+              [(ngModel)]="room.isPrivate"
+              name="isPrivate"
+              hidden
             />
+
+            <div class="lock-room">
+              <div class="icon" (click)="room.isPrivate = !room.isPrivate">
+                {{ room.isPrivate ? "🔒" : "🔓" }}
+              </div>
+
+              <input
+                [disabled]="!room.isPrivate"
+                [(ngModel)]="room.password"
+                type="password"
+                name="password"
+                class="new-password-input"
+                placeholder="Type here..."
+                autocomplete="new-password"
+              />
+            </div>
           </ng-container>
           <ng-template #othersRoom>
             <span>

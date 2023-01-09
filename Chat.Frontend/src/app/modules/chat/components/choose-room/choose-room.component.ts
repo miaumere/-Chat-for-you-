@@ -34,6 +34,7 @@ export class ChooseRoomComponent extends BaseComponent implements OnInit {
     name: '',
     password: '',
     color: 'Transparent',
+    isPrivate: false,
   };
   rooms: RoomDto[] = [];
 
@@ -76,7 +77,8 @@ export class ChooseRoomComponent extends BaseComponent implements OnInit {
       id: roomId ?? null,
       name: '' + form.value.name,
       color: form.value.color as ColorsString,
-      password: form.value.password,
+      password: form.value.password ?? '',
+      isPrivate: form.value.isPrivate,
     };
 
     this.subscriptions$.add(

@@ -112,6 +112,18 @@ select {
   border: none;
 
   border-radius: 3px;
+  &[disabled] {
+    color: grey;
+    pointer-events: none;
+    opacity: 0.8;
+    background: repeating-linear-gradient(
+      45deg,
+      var(--main-color),
+      var(--main-color) 10px,
+      var(--secondary-color) 10px,
+      var(--secondary-color) 20px
+    );
+  }
 }
 
 .button {
@@ -123,6 +135,12 @@ select {
 
 .icon {
   cursor: pointer;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 :root.light {
