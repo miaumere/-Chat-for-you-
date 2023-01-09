@@ -4,6 +4,7 @@ import {
   Resolve,
   ActivatedRouteSnapshot,
   RouterStateSnapshot,
+  ActivatedRoute,
 } from '@angular/router';
 
 @Injectable({
@@ -14,9 +15,12 @@ export class ChatRoomResolver implements Resolve<any> {
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     const id = route.params['id'];
+    let pass = '' + route.queryParamMap.get('param');
+
     if (!id) {
       return false;
     }
-    return this._roomService.getRoomById(id);
+
+    return this._roomService.getRoomById(id, pass);
   }
 }

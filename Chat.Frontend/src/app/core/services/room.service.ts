@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { delay, map } from 'rxjs';
 import { IRoomRequest } from './models/room-request.model';
 import { IRoomDto, RoomDto } from './models/room-dto.model';
@@ -21,13 +21,10 @@ export class RoomService {
     );
   }
 
-  getRoomById(roomId: number) {
-    return this.http.get<RoomDto>(`${this._baseUrl}/${roomId}`).pipe(
-      map((response: IRoomDto) => {
-        const mappedResponse = new RoomDto(response);
-        return mappedResponse;
-      })
-    );
+  getRoomById(roomId: number, password: string) {
+    let params = new HttpParams().set('password', password);
+
+    return this.http.get<RoomDto>(`${this._baseUrl}/${roomId}`, { params });
   }
 
   UpsertRoom(request: IRoomRequest) {

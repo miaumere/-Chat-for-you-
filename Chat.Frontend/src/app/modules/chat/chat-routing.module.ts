@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthGuard } from 'src/app/core/services/auth-guard.service';
 import { ChatRoomResolver } from 'src/app/core/services/chat-room.resolver';
 import { ChatIndexComponent } from './components/chat-index.component';
 import { ChatRoomComponent } from './components/chat-room/chat-room.component';
@@ -15,9 +14,7 @@ const routes: Routes = [
       {
         path: ':id',
         component: ChatRoomComponent,
-        resolve: {
-          data: ChatRoomResolver,
-        },
+        resolve: { data: ChatRoomResolver },
       },
     ],
   },

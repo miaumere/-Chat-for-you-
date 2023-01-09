@@ -26,9 +26,12 @@ namespace Chat.API.Controllers
 
         
         [HttpGet("{id}")]
-        public async Task<RoomBaseDto> GetRoomDetails([FromRoute] int id)
+        public async Task<IActionResult> GetRoomDetails([FromRoute] int id, [FromQuery] string password)
         {
-            return await _roomService.GetRoomDetailsById(id);
+            var response =  await _roomService.GetRoomDetailsById(id, password);
+            if(response == null) { return Unauthorized(); }
+            return Ok(response);
+
         }
 
 

@@ -40,7 +40,8 @@ export class ChooseRoomComponent extends BaseComponent implements OnInit {
 
   constructor(
     private _roomService: RoomService,
-    private _authService: AuthService
+    private _authService: AuthService,
+    private _route: Router
   ) {
     super();
   }
@@ -85,7 +86,9 @@ export class ChooseRoomComponent extends BaseComponent implements OnInit {
     );
   }
 
-  onSubmit(form: NgForm) {
-    // console.log(form.value);
-  }
+  // goToRoom(room: RoomDto) {
+  //   this._route.navigate([`./${room.id}`], {
+  //     queryParams: { param: room.id },
+  //   });
+  // }
 }

@@ -55,15 +55,28 @@ namespace Chat.API.Services
             return result;
         }
 
-        public async Task<RoomBaseDto> GetRoomDetailsById(int roomId)
+        public async Task<RoomBaseDto?> GetRoomDetailsById(int roomId, string password)
         {
 
-            var roomsFromDb = await _apiDbContext
+            var roomFromDb = await _apiDbContext
                 .Rooms
                 .Where(r => r.Id == roomId)
                 .FirstOrDefaultAsync();
 
-            var response = new RoomBaseDto(roomsFromDb);
+            if(roomFromDb == null) { return null; }
+            if(roomFromDb.RoomPassword != null)
+            {
+                byte[] decodedBytes = Convert.FromBase64String(password);
+                string decodedString = Encoding.UTF8.GetString(decodedBytes);
+
+                var hashedPassword = _HashPassword(decodedString);
+                if(roomFromDb.RoomPassword != hashedPassword)
+                {
+                    return null;
+                }
+            }
+
+            var response = new RoomBaseDto(roomFromDb);
             
             return response;
         }

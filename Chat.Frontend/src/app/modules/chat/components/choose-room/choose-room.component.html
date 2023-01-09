@@ -34,7 +34,7 @@
         ❌
       </div>
     </div>
-    <form #form="ngForm" (ngSubmit)="onSubmit(form)">
+    <form #form="ngForm">
       <div class="room-block">
         <div class="room-with-options">
           <div class="room-options">
@@ -77,7 +77,11 @@
             minlength="3"
             maxlength="50"
           />
-          <span class="icon" *ngIf="room.id" [routerLink]="['./', room.id]"
+          <span
+            class="icon"
+            *ngIf="room.id"
+            [routerLink]="['./', room.id]"
+            [queryParams]="{ param: (room.password | base64Encode) }"
             >➡️</span
           >
         </div>

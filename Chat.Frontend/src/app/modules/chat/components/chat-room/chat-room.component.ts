@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BaseComponent } from 'src/app/core/base.component';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { ChatService } from 'src/app/core/services/chat.service';
@@ -24,14 +24,14 @@ export class ChatRoomComponent
   constructor(
     private _chatService: ChatService,
     private _authService: AuthService,
-    private _route: ActivatedRoute
+    private _route: ActivatedRoute,
+    private _router: Router
   ) {
     super();
   }
 
   ngOnInit(): void {
     this.room = this._route.snapshot.data['data'];
-    console.log(this.room);
     if (!!this.room) {
       this._authService.user$.subscribe((user) => {
         if (user) this.user = user;
