@@ -31,12 +31,11 @@ namespace Chat.API.Controllers
             var response =  await _roomService.GetRoomDetailsById(id, password);
             if(response == null) { return Unauthorized(); }
             return Ok(response);
-
         }
 
 
         [HttpPost, Route("")]
-        public async Task<bool> CreateRoom([FromBody] RoomRequest request)
+        public async Task<bool> UpsertRoom([FromBody] RoomRequest request)
         {
             return await _roomService.UpsertRoom(request);
         }

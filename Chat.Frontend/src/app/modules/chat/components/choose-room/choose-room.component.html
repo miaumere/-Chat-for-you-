@@ -124,7 +124,7 @@
               name="password"
               type="password"
               class="new-password-input"
-              placeholder="Type here..."
+              placeholder="Type here to enter..."
               autocomplete="new-password"
             />
           </ng-template>
@@ -134,7 +134,10 @@
         type="submit"
         class="button button--create-new-room"
         (click)="upsertRoom(form, room.id)"
-        *ngIf="form.form.dirty || !room.id"
+        *ngIf="
+          ((user$ | async)?.username === room.username || !room.id) &&
+          form.form.dirty
+        "
         [disabled]="!form.form.valid"
       >
         ➕ Submit

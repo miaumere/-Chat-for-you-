@@ -1,3 +1,4 @@
+import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -31,7 +32,11 @@ export class LoginPageComponent extends BaseComponent implements OnInit {
   passwordsError = false;
   loginError = false;
 
-  constructor(private _router: Router, private _authService: AuthService) {
+  constructor(
+    private _router: Router,
+    private _authService: AuthService,
+    private _toastrService: ToastrService
+  ) {
     super();
   }
 
@@ -56,8 +61,8 @@ export class LoginPageComponent extends BaseComponent implements OnInit {
     this.subscriptions$.add(
       this._authService.login(request).subscribe({
         next: (t) => {
-          console.log(t);
           this._router.navigate(['/chat']);
+          this._toastrService.success('User logged in!');
         },
         error: (e) => {
           console.log(e);
@@ -96,6 +101,7 @@ export class LoginPageComponent extends BaseComponent implements OnInit {
       this._authService.register(request).subscribe({
         next: () => {
           this._router.navigate(['/chat']);
+          this._toastrService.success('Sucessfully created new user!');
         },
         error: (e) => {
           console.error(e);

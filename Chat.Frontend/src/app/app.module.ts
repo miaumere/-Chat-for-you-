@@ -10,6 +10,7 @@ import { AuthGuard } from './core/services/auth-guard.service';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Interceptor } from './core/services/interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [AppComponent, FooterComponent],
@@ -19,6 +20,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     SharedModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    ToastrModule.forRoot({
+      preventDuplicates: true,
+      progressBar: true,
+      timeOut: 1500,
+    }),
   ],
   bootstrap: [AppComponent],
   providers: [

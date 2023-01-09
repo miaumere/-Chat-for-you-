@@ -13,9 +13,6 @@
       <input type="password" formControlName="password" />
     </label>
   </form>
-  <div appError *ngIf="loginError" class="error-message">
-    error has occured!
-  </div>
 
   <button class="button button--go" [disabled]="!form.valid" (click)="login()">
     🔑 login

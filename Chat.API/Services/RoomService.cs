@@ -97,7 +97,7 @@ namespace Chat.API.Services
                 return false;
             }
             Room room; 
-            if (roomRequest?.Id != null) {
+            if (roomRequest?.Id != null && roomRequest?.Id != 0) {
                 var existingRoom = await _apiDbContext
                     .Rooms
                     .Where(r => r.Id == roomRequest.Id)

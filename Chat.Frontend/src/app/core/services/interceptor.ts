@@ -1,3 +1,4 @@
+import { ToastrService } from 'ngx-toastr';
 import { Injectable } from '@angular/core';
 import {
   HttpInterceptor,
@@ -5,13 +6,17 @@ import {
   HttpResponse,
   HttpRequest,
   HttpHandler,
+  HttpErrorResponse,
 } from '@angular/common/http';
-import { finalize, Observable } from 'rxjs';
+import { catchError, finalize, map, Observable, throwError } from 'rxjs';
 import { LoaderService } from './loader.service';
 
 @Injectable({ providedIn: 'root' })
 export class Interceptor implements HttpInterceptor {
-  constructor(private _loaderService: LoaderService) {}
+  constructor(
+    private _loaderService: LoaderService,
+    private _toastrService: ToastrService
+  ) {}
 
   intercept(
     httpRequest: HttpRequest<any>,
@@ -27,6 +32,10 @@ export class Interceptor implements HttpInterceptor {
       });
     }
     return next.handle(httpRequest).pipe(
+      catchError((error: HttpErrorResponse) => {
+        this._toastrService.error('⚠️ An error has occured!');
+        return throwError(error);
+      }),
       finalize(() => {
         this._loaderService.hide();
       })

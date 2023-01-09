@@ -10,6 +10,7 @@ import { IRoomRequest } from 'src/app/core/services/models/room-request.model';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { UserDto } from 'src/app/core/services/models/user.model';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-choose-room',
@@ -41,7 +42,7 @@ export class ChooseRoomComponent extends BaseComponent implements OnInit {
   constructor(
     private _roomService: RoomService,
     private _authService: AuthService,
-    private _route: Router
+    private _toastrService: ToastrService
   ) {
     super();
   }
@@ -72,7 +73,7 @@ export class ChooseRoomComponent extends BaseComponent implements OnInit {
       return;
     }
     const request: IRoomRequest = {
-      id: roomId,
+      id: roomId ?? null,
       name: '' + form.value.name,
       color: form.value.color as ColorsString,
       password: form.value.password,
@@ -82,13 +83,10 @@ export class ChooseRoomComponent extends BaseComponent implements OnInit {
       this._roomService.UpsertRoom(request).subscribe(() => {
         this.getChatRooms();
         form.reset();
+        this._toastrService.success(
+          roomId ? 'Sucessfully updated room' : 'Sucessfully added room'
+        );
       })
     );
   }
-
-  // goToRoom(room: RoomDto) {
-  //   this._route.navigate([`./${room.id}`], {
-  //     queryParams: { param: room.id },
-  //   });
-  // }
 }
