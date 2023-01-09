@@ -6,7 +6,6 @@ import { ChatService } from 'src/app/core/services/chat.service';
 import { IMessage } from 'src/app/core/services/models/message.model';
 import { RoomDto } from 'src/app/core/services/models/room-dto.model';
 import { UserDto } from 'src/app/core/services/models/user.model';
-import { RoomService } from 'src/app/core/services/room.service';
 
 @Component({
   selector: 'app-chat-room',
@@ -20,28 +19,25 @@ export class ChatRoomComponent
   user?: UserDto;
   messages: IMessage[] = [];
 
-  roomId: string = '';
-
   room: RoomDto | null = null;
 
   constructor(
     private _chatService: ChatService,
-    private _route: ActivatedRoute,
-    private _roomService: RoomService,
-    private _authService: AuthService
+    private _authService: AuthService,
+    private _route: ActivatedRoute
   ) {
     super();
   }
 
   ngOnInit(): void {
-    this.roomId = '' + this._route.snapshot.paramMap.get('id');
-    if (!!this.roomId) {
+    this.room = this._route.snapshot.data['data'];
+    console.log(this.room);
+    if (!!this.room) {
       this._authService.user$.subscribe((user) => {
         if (user) this.user = user;
       });
 
-      this.getRoomDetails(+this.roomId);
-      this._chatService.startConnection(this.roomId);
+      this._chatService.startConnection('' + this.room.id);
 
       this._chatService.messages$.subscribe((messages) => {
         this.messages = [...messages];
@@ -49,16 +45,8 @@ export class ChatRoomComponent
     }
   }
 
-  getRoomDetails(roomId: number) {
-    this.subscriptions$.add(
-      this._roomService.getRoomById(roomId).subscribe((room) => {
-        this.room = room;
-      })
-    );
-  }
-
   override ngOnDestroy(): void {
     this.subscriptions$.unsubscribe();
-    this._chatService.closeConnection(this.roomId);
+    this._chatService.closeConnection('' + this.room?.id);
   }
 }

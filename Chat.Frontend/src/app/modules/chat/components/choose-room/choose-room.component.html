@@ -90,7 +90,9 @@
           >
             🔐 Set a password to make this room private:
             <input
+              [(ngModel)]="room.password"
               type="password"
+              name="password"
               class="new-password-input"
               placeholder="Type here..."
               autocomplete="new-password"
@@ -114,6 +116,8 @@
             </span>
             <input
               *ngIf="room.isPrivate"
+              [(ngModel)]="room.password"
+              name="password"
               type="password"
               class="new-password-input"
               placeholder="Type here..."
