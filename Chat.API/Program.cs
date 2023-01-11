@@ -95,6 +95,22 @@ app.MapHub<ChatHub>(chatUrn, options =>
 app.UseAuthorization();
 app.UseAuthentication();
 
+
+#if RELEASE
+app.UseStaticFiles();
+app.MapFallbackToFile("index.html");
+
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<ApiDbContext>();
+    context.Database.Migrate();
+}
+#endif
+
+
 app.MapControllers();
 
+
+
 app.Run();
+

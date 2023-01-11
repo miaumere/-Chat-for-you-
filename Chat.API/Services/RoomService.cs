@@ -23,6 +23,11 @@ namespace Chat.API.Services
 
         private string _HashPassword(string secret)
         {
+
+
+
+
+
             var passKey = _configuration.GetValue<string>("RoomKey");
             using var sha256 = SHA256.Create();
             var secretBytes = Encoding.UTF8.GetBytes(secret + passKey);
@@ -57,6 +62,9 @@ namespace Chat.API.Services
 
         public async Task<RoomBaseDto?> GetRoomDetailsById(int roomId, string password)
         {
+
+
+
             int userId = Utils.Utils.GetUserIdFromHttpContext(_httpContextAccessor);
 
             var roomFromDb = await _apiDbContext
