@@ -8,5 +8,6 @@
 }
 
 .main-content {
-  height: calc(100% - #{$footer-size});
+  height: calc(100% - 4rem);
+  overflow-y: auto;
 }

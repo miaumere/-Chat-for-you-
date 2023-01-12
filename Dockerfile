@@ -1,5 +1,7 @@
 #See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
+ARG CACHEBUST=1
+
 FROM ubuntu:22.04 AS runtime
 # Install ASP.NET Runtime
 RUN apt-get update
@@ -18,15 +20,19 @@ RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
 RUN apt-get install nodejs
 
 FROM publish AS publish-api
-ARG CACHEBUST=1
+ARG CACHEBUST
 WORKDIR /src
+RUN echo ${CACHEBUST}
 COPY ["./Chat.API", "./"]
 RUN dotnet publish "Chat.API.csproj" -c Release -o /app/publish
 
 FROM publish AS publish-frontend
-ARG CACHEBUST=1
+ARG CACHEBUST
 WORKDIR /src
-COPY ["./Chat.Frontend", "./"]
+RUN echo ${CACHEBUST}
+COPY ["./Chat.Frontend/", "./"]
+ARG NG_CLI_ANALYTICS="false"
+RUN npm install
 RUN npm run build:prod
 RUN mkdir /app
 RUN mkdir /app/publish

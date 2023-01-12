@@ -1,6 +1,6 @@
 services:
   application:
-    image: chat
+    image: meowmereee/chat
     restart: always
     depends_on:
       - "database"

@@ -1,1 +1,1 @@
-docker build -t chat --build-arg CACHEBUST=$(date +%s) .
+docker build -t meowmereee/chat --build-arg CACHEBUST=$(date +%s) .
