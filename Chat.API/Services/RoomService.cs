@@ -1,7 +1,9 @@
 ﻿using Chat.API.Enums;
 using Chat.API.Models;
 using Chat.API.Persistance;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 using System.Drawing;
 using System.Security.Cryptography;
 using System.Text;
@@ -55,7 +57,7 @@ namespace Chat.API.Services
             return result;
         }
 
-        public async Task<RoomBaseDto?> GetRoomDetailsById(int roomId, string password)
+        public async Task<ObjectResult> GetRoomDetailsById(int roomId, string password)
         {
             int userId = Utils.Utils.GetUserIdFromHttpContext(_httpContextAccessor);
 
@@ -65,7 +67,7 @@ namespace Chat.API.Services
                 .Where(r => r.Id == roomId)
                 .FirstOrDefaultAsync();
 
-            if(roomFromDb == null) { return null; }
+            if(roomFromDb == null) { return new ObjectResult("Room does not exist!") { StatusCode = 400 }; }
             if(roomFromDb.RoomPassword != null && roomFromDb.RoomPassword.Length > 0 && roomFromDb.CreatedBy.Id != userId)
             {
                 byte[] decodedBytes = Convert.FromBase64String(password);
@@ -74,16 +76,17 @@ namespace Chat.API.Services
                 var hashedPassword = _HashPassword(decodedString);
                 if(roomFromDb.RoomPassword != hashedPassword)
                 {
-                    return null;
+                    return new ObjectResult("Wrong password") { StatusCode = 400 };
                 }
             }
 
             var response = new RoomBaseDto(roomFromDb);
             
-            return response;
+            return new ObjectResult(response) { StatusCode = 200 };
+
         }
 
-        public async Task<bool> UpsertRoom(RoomRequest roomRequest)
+        public async Task<ObjectResult> UpsertRoom(RoomRequest roomRequest)
         {
 
             int userId = Utils.Utils.GetUserIdFromHttpContext(_httpContextAccessor);
@@ -95,7 +98,7 @@ namespace Chat.API.Services
 
             if(user == null)
             {
-                return false;
+                return new ObjectResult("User does not exist!" ) { StatusCode = 401 };
             }
             Room room;
 
@@ -119,14 +122,11 @@ namespace Chat.API.Services
                     .SingleOrDefaultAsync();
                 if(existingRoom == null)
                 {
-                    return false;
+                    return new ObjectResult("Wrong password!") { StatusCode = 401 };
                 }
                 existingRoom.Name = roomRequest.Name;
                 existingRoom.Color = (Colors)Enum.Parse(typeof(Colors), roomRequest.Color);
-                if (roomRequest.Password != "")
-                {
-                    existingRoom.RoomPassword = roomPassword;
-                }
+                existingRoom.RoomPassword = roomPassword;
                 _apiDbContext.Update(existingRoom);
             } else
             {
@@ -134,14 +134,15 @@ namespace Chat.API.Services
                     CreatedBy = user, 
                     Name = roomRequest.Name, 
                     Color = (Colors)Enum.Parse(typeof(Colors), roomRequest.Color),
-                    RoomPassword = roomRequest.Password != "" ? roomPassword : null
+                    RoomPassword =roomPassword
             };
                
                 _apiDbContext.Add(room);
             }
 
             await _apiDbContext.SaveChangesAsync();
-            return true;
+            return new ObjectResult("") { StatusCode = 201 };
+
         }
 
         public async Task<bool> DeleteRoom(int roomId)

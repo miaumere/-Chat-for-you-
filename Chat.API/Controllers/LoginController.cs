@@ -24,14 +24,14 @@ namespace Chat.API.Controllers
         }
 
         [HttpPost, Route("")]
-        public async Task<string> Login([FromBody] UserRequest request)
+        public async Task<ObjectResult> Login([FromBody] UserRequest request)
         {
             return await _loginService.Login(request);
 
         }
 
         [HttpPost, Route("register")]
-        public async Task<ActionResult<string>> Registrate([FromBody] UserRequest request)
+        public async Task<ObjectResult> Registrate([FromBody] UserRequest request)
         {
             return await _loginService.Registrate(request);
         }

@@ -35,7 +35,7 @@ namespace Chat.API.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<string> Login(UserRequest request)
+        public async Task<ObjectResult> Login(UserRequest request)
         {
             var userEntity = await
                 _apiDbContext.Users
@@ -44,14 +44,16 @@ namespace Chat.API.Services
 
             if (userEntity == null)
             {
-                throw new Exception("User does not exist!");
+                return new ObjectResult("Wrong password or login!") { StatusCode = 401 };
+
             }
 
             var token = CreateCookieWithJWTTokenForUser(userEntity);
-            return token;
+            return new ObjectResult(token) { StatusCode = 200 };
+
         }
 
-        public async Task<string> Registrate(UserRequest request)
+        public async Task<ObjectResult> Registrate(UserRequest request)
         {
 
             var sameUser = await _apiDbContext
@@ -61,7 +63,7 @@ namespace Chat.API.Services
 
             if (sameUser != null)
             {
-                throw new Exception("User of this username exists");
+                return new ObjectResult("User of this username exists") { StatusCode = 400 };
             }
             var userEntity = new User() { Name = request.Username };
 
@@ -72,7 +74,7 @@ namespace Chat.API.Services
 
             var token = CreateCookieWithJWTTokenForUser(userEntity);
 
-            return token;
+            return new ObjectResult(token) { StatusCode = 200 };
         }
 
         private string HashPassword(string secret)

@@ -42,6 +42,8 @@ export class ChatRoomComponent
       this._chatService.messages$.subscribe((messages) => {
         this.messages = [...messages];
       });
+    } else {
+      this._router.navigate(['../']);
     }
   }
 

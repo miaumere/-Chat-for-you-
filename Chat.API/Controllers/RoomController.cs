@@ -26,16 +26,15 @@ namespace Chat.API.Controllers
 
         
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetRoomDetails([FromRoute] int id, [FromQuery] string password)
+        public async Task<ObjectResult> GetRoomDetails([FromRoute] int id, [FromQuery] string password)
         {
             var response =  await _roomService.GetRoomDetailsById(id, password);
-            if(response == null) { return Unauthorized(); }
-            return Ok(response);
+            return response;
         }
 
 
         [HttpPost, Route("")]
-        public async Task<bool> UpsertRoom([FromBody] RoomRequest request)
+        public async Task<ObjectResult> UpsertRoom([FromBody] RoomRequest request)
         {
             return await _roomService.UpsertRoom(request);
         }

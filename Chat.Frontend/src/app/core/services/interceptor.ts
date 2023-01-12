@@ -33,7 +33,12 @@ export class Interceptor implements HttpInterceptor {
     }
     return next.handle(httpRequest).pipe(
       catchError((error: HttpErrorResponse) => {
-        this._toastrService.error('⚠️ An error has occured!');
+        console.log(error);
+        this._toastrService.error(
+          error.status !== 500 ? error.error : '',
+          '⚠️ An error has occured!'
+        );
+
         return throwError(error);
       }),
       finalize(() => {
