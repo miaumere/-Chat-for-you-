@@ -3,27 +3,29 @@
 <div class="container">
   <form [formGroup]="form">
     <label>
-      username:
+      Username:
       <input type="text" formControlName="username" />
     </label>
 
     <br />
     <label>
-      password:
+      Password:
       <input type="password" formControlName="password" />
     </label>
   </form>
 
   <button class="button button--go" [disabled]="!form.valid" (click)="login()">
-    🔑 login
+    🔑 Login
   </button>
   <br />
-  or create new user
+
+  Or create new user
+  <br />
   <br />
 
   <form [formGroup]="newUserForm">
     <label>
-      username:
+      Username:
       <input
         type="text"
         formControlName="username"
@@ -32,10 +34,10 @@
     </label>
 
     <div appError *ngIf="passwordsError" class="error-message">
-      error: passwords aren't the same!
+      Rrror: passwords aren't the same!
     </div>
     <label>
-      password:
+      Password:
       <input
         type="password"
         id="inputId"
@@ -45,7 +47,7 @@
     </label>
 
     <label>
-      re-type password:
+      Re-type password:
       <input type="password" formControlName="retryPassword" />
     </label>
   </form>
@@ -54,6 +56,6 @@
     [disabled]="!newUserForm.valid"
     (click)="createNewUser()"
   >
-    🔐 register
+    🔐 Register
   </button>
 </div>

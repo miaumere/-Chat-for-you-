@@ -23,11 +23,6 @@ namespace Chat.API.Services
 
         private string _HashPassword(string secret)
         {
-
-
-
-
-
             var passKey = _configuration.GetValue<string>("RoomKey");
             using var sha256 = SHA256.Create();
             var secretBytes = Encoding.UTF8.GetBytes(secret + passKey);
@@ -62,9 +57,6 @@ namespace Chat.API.Services
 
         public async Task<RoomBaseDto?> GetRoomDetailsById(int roomId, string password)
         {
-
-
-
             int userId = Utils.Utils.GetUserIdFromHttpContext(_httpContextAccessor);
 
             var roomFromDb = await _apiDbContext
@@ -74,7 +66,7 @@ namespace Chat.API.Services
                 .FirstOrDefaultAsync();
 
             if(roomFromDb == null) { return null; }
-            if(roomFromDb.RoomPassword != null && roomFromDb.CreatedBy.Id != userId)
+            if(roomFromDb.RoomPassword != null && roomFromDb.RoomPassword.Length > 0 && roomFromDb.CreatedBy.Id != userId)
             {
                 byte[] decodedBytes = Convert.FromBase64String(password);
                 string decodedString = Encoding.UTF8.GetString(decodedBytes);
@@ -109,10 +101,17 @@ namespace Chat.API.Services
 
             string roomPassword = "";            
             
-            roomPassword = roomRequest?.Password != null 
-                ? _HashPassword(roomRequest.Password) 
+            if (roomRequest.IsPrivate)
+            {
+                roomPassword = roomRequest?.Password != null && roomRequest.Password.Length > 0
+                ? _HashPassword(roomRequest.Password)
                 : null;
-            
+
+            } else
+            {
+                roomPassword = null;
+            }
+
             if (roomRequest?.Id != null && roomRequest?.Id != 0) {
                 var existingRoom = await _apiDbContext
                     .Rooms
@@ -135,7 +134,7 @@ namespace Chat.API.Services
                     CreatedBy = user, 
                     Name = roomRequest.Name, 
                     Color = (Colors)Enum.Parse(typeof(Colors), roomRequest.Color),
-                    RoomPassword = roomPassword
+                    RoomPassword = roomRequest.Password != "" ? roomPassword : null
             };
                
                 _apiDbContext.Add(room);

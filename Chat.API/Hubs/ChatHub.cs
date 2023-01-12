@@ -89,7 +89,7 @@ namespace Chat.API.Hubs
 
             
             await Clients.Groups(roomId).SendAsync("GetRoomWithUsers", usersList);            
-            await Clients.Groups(roomId).SendAsync("GetLastMessages", await GetLastMessages(roomId));
+            await Clients.Caller.SendAsync("GetLastMessages", await GetLastMessages(roomId));
 
         }
 

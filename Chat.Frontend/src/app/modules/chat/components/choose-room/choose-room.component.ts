@@ -85,6 +85,7 @@ export class ChooseRoomComponent extends BaseComponent implements OnInit {
       this._roomService.UpsertRoom(request).subscribe(() => {
         this.getChatRooms();
         form.reset();
+        this.room.color = 'Transparent';
         this._toastrService.success(
           roomId ? 'Sucessfully updated room' : 'Sucessfully added room'
         );

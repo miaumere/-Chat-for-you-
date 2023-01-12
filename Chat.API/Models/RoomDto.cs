@@ -13,7 +13,7 @@ namespace Chat.API.Models
             Id = roomFromDb.Id;
             Name = roomFromDb.Name;
             Color = roomFromDb.Color != null ? roomFromDb.Color.ToString() : Colors.Transparent.ToString();
-            IsPrivate = roomFromDb.RoomPassword != null;
+            IsPrivate = roomFromDb.RoomPassword != null && roomFromDb.RoomPassword.Length > 0;
             Username = roomFromDb.CreatedBy?.Name;
         }
 

@@ -97,17 +97,15 @@
               owner - you can visit the room without password. Use this input
               only for editing:
             </span>
-            <input
-              type="checkbox"
-              [(ngModel)]="room.isPrivate"
-              name="isPrivate"
-              hidden
-            />
 
             <div class="lock-room">
-              <div class="icon" (click)="room.isPrivate = !room.isPrivate">
-                {{ room.isPrivate ? "🔒" : "🔓" }}
-              </div>
+              <input
+                type="checkbox"
+                [(ngModel)]="room.isPrivate"
+                name="isPrivate"
+                #nameRef
+                class="lock-checkbox"
+              />
 
               <input
                 [disabled]="!room.isPrivate"
