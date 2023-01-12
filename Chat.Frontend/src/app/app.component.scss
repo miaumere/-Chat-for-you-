@@ -1,0 +1,12 @@
+@import "variables.scss";
+
+:host {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
+}
+
+.main-content {
+  height: calc(100% - #{$footer-size});
+}

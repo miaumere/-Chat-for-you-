@@ -1,0 +1,163 @@
+<app-header></app-header>
+
+<div class="choose-room-container">
+  <div class="container container--my-rooms">
+    <ng-container
+      *ngTemplateOutlet="roomItem; context: { room }"
+    ></ng-container>
+  </div>
+
+  <div>
+    <div class="container__title">Available rooms:</div>
+
+    <div *ngIf="rooms.length > 0" class="container container--other-rooms">
+      <ng-container *ngFor="let room of rooms">
+        <ng-container
+          *ngTemplateOutlet="roomItem; context: { room }"
+        ></ng-container
+      ></ng-container>
+    </div>
+    <span *ngIf="rooms.length == 0" class="no-available-rooms">
+      No available rooms
+    </span>
+  </div>
+</div>
+
+<ng-template #roomItem let-room="room">
+  <div class="form-container">
+    <div class="icons-container">
+      <div
+        class="icon"
+        *ngIf="(user$ | async)?.username === room.username && room.id"
+        (dblclick)="deleteRoom(room.id)"
+      >
+        ❌
+      </div>
+    </div>
+    <form #form="ngForm">
+      <div class="room-block">
+        <div class="room-with-options">
+          <div class="room-options">
+            <app-profile-pic
+              class="profile-pic"
+              [size]="'1rem'"
+              [username]="room.username"
+              *ngIf="room.id"
+            ></app-profile-pic>
+            <select
+              class="available-colors-select"
+              [(ngModel)]="room.color"
+              name="color"
+              *ngIf="
+                (user$ | async)?.username === room.username || !room.id;
+                else colorDot
+              "
+            >
+              <option
+                selected
+                *ngFor="let color of availableColorsMap"
+                [value]="color.colorName"
+              >
+                {{ color.value }}
+              </option>
+            </select>
+            <ng-template #colorDot>
+              <div class="room-color-dot">
+                {{ availableColorsMap[+Colors[room.color]].value }}
+              </div>
+            </ng-template>
+          </div>
+
+          <input
+            type="text"
+            name="name"
+            [(ngModel)]="room.name"
+            placeholder="Enter room name..."
+            required
+            minlength="3"
+            maxlength="50"
+          />
+          <span
+            class="icon"
+            *ngIf="room.id"
+            [routerLink]="['./', room.id]"
+            [queryParams]="{ param: (room.password | base64Encode) }"
+            >➡️</span
+          >
+        </div>
+        <div class="room-privacy">
+          <ng-container
+            *ngIf="
+              (user$ | async)?.username === room.username || !room.id;
+              else othersRoom
+            "
+          >
+            <span class="room-privacy__info">
+              🔐 Set a password to make this room private. <br />You are the
+              owner - you can visit the room without password. Use this input
+              only for editing:
+            </span>
+
+            <div class="lock-room">
+              <input
+                type="checkbox"
+                [(ngModel)]="room.isPrivate"
+                name="isPrivate"
+                #nameRef
+                class="lock-checkbox"
+              />
+
+              <input
+                [disabled]="!room.isPrivate"
+                [(ngModel)]="room.password"
+                type="password"
+                name="password"
+                class="new-password-input"
+                placeholder="Type here..."
+                autocomplete="new-password"
+              />
+            </div>
+          </ng-container>
+          <ng-template #othersRoom>
+            <span>
+              <span
+                class="icon-lock"
+                [ngClass]="{ 'icon-lock--locked': room.isPrivate }"
+              >
+                {{ room.isPrivate ? "🔐" : "🔓" }}
+              </span>
+              <span>
+                {{
+                  room.isPrivate
+                    ? " This room is private. Enter password:"
+                    : " This room is public"
+                }}
+              </span>
+            </span>
+            <input
+              *ngIf="room.isPrivate"
+              [(ngModel)]="room.password"
+              name="password"
+              type="password"
+              class="new-password-input"
+              placeholder="Type here to enter..."
+              autocomplete="new-password"
+            />
+          </ng-template>
+        </div>
+      </div>
+      <button
+        type="submit"
+        class="button button--create-new-room"
+        (click)="upsertRoom(form, room.id)"
+        *ngIf="
+          ((user$ | async)?.username === room.username || !room.id) &&
+          form.form.dirty
+        "
+        [disabled]="!form.form.valid"
+      >
+        ➕ Submit
+      </button>
+    </form>
+  </div>
+</ng-template>

@@ -1,0 +1,38 @@
+@import "variables";
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  height: $footer-size;
+  background: var(--secondary-color);
+  font-family: var(--font-basic);
+  font-size: 1rem;
+}
+
+.motives-container {
+  display: flex;
+  align-items: center;
+
+  font-size: 1.5rem;
+  margin-left: 1rem;
+
+  &__title {
+    font-size: 1rem;
+  }
+}
+
+.user-info {
+  margin-right: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.username {
+  margin-right: 1rem;
+}
+
+.logout {
+  font-size: 1.5rem;
+}

@@ -1,0 +1,35 @@
+services:
+  application:
+    image: chat
+    restart: always
+    depends_on:
+      - "database"
+    ports:
+      - "5000:5000"
+    networks:
+      network:
+        ipv4_address: 10.5.0.2
+    environment:
+      - ConnectionStrings:Default=Host=10.5.0.3;Database=chat;Username=postgres;Password=postgres
+
+  database:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    ports:
+      - "5433:5432"
+    volumes:
+        - ./volumes/postgres:/var/lib/postgresql/data
+    networks:
+      network:
+        ipv4_address: 10.5.0.3
+
+networks:
+  network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.5.0.0/24
+          gateway: 10.5.0.1

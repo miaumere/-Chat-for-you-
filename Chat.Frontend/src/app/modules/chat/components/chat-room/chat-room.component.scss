@@ -1,0 +1,28 @@
+@import "variables.scss";
+
+.chat-room {
+  height: calc(100%);
+  background: var(--secondary-color);
+
+  &__name {
+    display: flex;
+    align-items: center;
+    height: 5rem;
+    width: 100%;
+
+    font-size: 2rem;
+    margin: 0;
+
+    background: var(--secondary-color);
+  }
+
+  &__content {
+    display: flex;
+    justify-content: space-between;
+    height: calc(100% - 5rem);
+  }
+}
+
+.back-icon {
+  margin-right: 1rem;
+}

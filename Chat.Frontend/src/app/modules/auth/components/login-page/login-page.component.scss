@@ -1,0 +1,46 @@
+@import "variables";
+
+.container {
+  font-family: var(--font-basic);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  margin-top: 1rem;
+  font-size: 1rem;
+
+  & input,
+  select {
+    font-size: 1rem;
+    height: 3rem;
+    width: 100%;
+    max-width: 25rem;
+
+    margin: 0.5rem;
+  }
+
+  & label {
+    display: flex;
+    align-items: baseline;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+}
+
+.button {
+  &--go {
+    margin-top: 1.5rem;
+  }
+  &--create-new-room {
+    margin-top: 1rem;
+  }
+
+  &:hover {
+    color: var(--font-second-color);
+  }
+}
+
+.error-message {
+  margin: 0.5rem;
+}

@@ -1,0 +1,14 @@
+<aside class="users-list-panel" [ngClass]="room?.color">
+  <p class="users-list-panel__title">
+    available ({{ (users$ | async)?.length }})
+  </p>
+
+  <ul>
+    <li *ngFor="let user of users$ | async">
+      <div class="user-info">
+        <app-profile-pic [username]="user.username"></app-profile-pic>
+        <span>{{ user.username }}</span>
+      </div>
+    </li>
+  </ul>
+</aside>

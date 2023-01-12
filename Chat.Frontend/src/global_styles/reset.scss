@@ -1,0 +1,60 @@
+ul,
+ol {
+  list-style: none;
+}
+
+body {
+  line-height: 1;
+}
+
+html,
+body,
+div,
+span,
+form,
+label,
+article,
+aside,
+footer,
+header,
+menu,
+nav,
+ul,
+p,
+li,
+section {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+  background: transparent;
+}
+
+a,
+button {
+  all: unset;
+
+  cursor: pointer;
+}
+
+summary {
+  outline: none;
+
+  &:checked {
+    outline: none;
+  }
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}

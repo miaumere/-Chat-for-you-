@@ -1,0 +1,19 @@
+<footer class="footer">
+  <div class="motives-container">
+    <span class="motives-container__title"> App theme: </span>
+
+    <button (click)="setTheme('light')">☀️</button>
+    <button (click)="setTheme('dark')">🌚</button>
+  </div>
+  <div class="user-info">
+    <app-profile-pic
+      class="profile-pic"
+      *ngIf="_authService.user$ | async"
+      [username]="(_authService.user$ | async)!.username"
+    ></app-profile-pic>
+    <span class="username">{{
+      (_authService.user$ | async)?.username ?? "not logged in"
+    }}</span>
+    <span (click)="logout()" class="icon logout"> 🔓 </span>
+  </div>
+</footer>

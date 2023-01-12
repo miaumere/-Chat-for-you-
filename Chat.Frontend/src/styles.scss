@@ -1,1 +1,222 @@
-/* You can add global styles to this file, and also import other style files */
+@import "./global_styles/reset.scss";
+@import "./fonts.scss";
+@import "./global_styles/variables.scss";
+@import "ngx-toastr/toastr";
+
+$error-color: tomato;
+
+/*#region light theme variables */
+$main-color-light: white;
+$secondary-color-light: whitesmoke;
+$font-main-color-light: #252628;
+$font-second-color-light: #e50000;
+
+$title-element-color-light: #800000;
+$title-attribute-color-light: #e50000;
+$title-attribute-value-color-light: #0000ff;
+$title-bracket-color-light: #800000;
+/*#endregion */
+
+/*#region dark theme variables */
+$main-color-dark: #343541;
+$secondary-color-dark: #202123;
+$font-main-color-dark: whitesmoke;
+$font-second-color-dark: #9cdcfe;
+
+$title-element-color-dark: #569cd6;
+$title-attribute-color-dark: #9cdcfe;
+$title-attribute-value-color-dark: #ce8349;
+$title-bracket-color-dark: grey;
+/*#endregion */
+
+@mixin light {
+  --main-color: #{$main-color-light};
+  --secondary-color: #{$secondary-color-light};
+  --font-main-color: #{$font-main-color-light};
+  --font-second-color: #{$font-second-color-light};
+
+  --title-element-color: #{$title-element-color-light};
+  --title-attribute-color: #{$title-attribute-color-light};
+  --title-attribute-value: #{$title-attribute-value-color-light};
+  --title-bracket-color: #{$title-bracket-color-light};
+}
+
+@mixin dark {
+  --main-color: #{$main-color-dark};
+  --secondary-color: #{$secondary-color-dark};
+  --font-main-color: #{$font-main-color-dark};
+  --font-second-color: #{$font-second-color-dark};
+
+  --title-element-color: #{$title-element-color-dark};
+  --title-attribute-color: #{$title-attribute-color-dark};
+  --title-attribute-value: #{$title-attribute-value-color-dark};
+  --title-bracket-color: #{$title-bracket-color-dark};
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    @include light;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    @include dark;
+  }
+}
+
+:root,
+:root.light {
+  @include light;
+  color-scheme: light;
+
+  *::selection {
+    color: #{$font-main-color-dark};
+    background: #{$font-second-color-light};
+  }
+}
+:root.dark {
+  @include dark;
+  color-scheme: dark;
+
+  *::selection {
+    color: #{$font-main-color-light};
+    background: #{$font-second-color-dark};
+  }
+}
+
+:root {
+  accent-color: var(--font-second-color);
+
+  --font-basic: "Cascadia Code Regular";
+  --font-special: "Cascadia Code Regular";
+  --error-color: #{$error-color};
+}
+
+body {
+  font-size: 62.5%;
+
+  background: var(--main-color);
+  font-family: var(--font-basic);
+  color: var(--font-main-color);
+}
+
+input,
+textarea,
+select {
+  color: var(--font-second-color);
+  font-family: var(--font-basic);
+  background: var(--secondary-color);
+
+  outline: none;
+  border: none;
+
+  border-radius: 3px;
+  &[disabled] {
+    color: grey;
+    pointer-events: none;
+    opacity: 0.8;
+    background: repeating-linear-gradient(
+      45deg,
+      var(--main-color),
+      var(--main-color) 10px,
+      var(--secondary-color) 10px,
+      var(--secondary-color) 20px
+    );
+  }
+}
+
+.button {
+  &[disabled] {
+    color: grey;
+    pointer-events: none;
+  }
+}
+
+.icon {
+  cursor: pointer;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+:root.light {
+  .Red {
+    background: #ff9f9f !important;
+    &--secondary {
+      background: #ffc0c0 !important;
+    }
+  }
+  .Orange {
+    background: #ffd29f !important;
+    &--secondary {
+      background: #ffeec0 !important;
+    }
+  }
+  .Yellow {
+    background: #fff99f !important;
+    &--secondary {
+      background: #fbffc9 !important;
+    }
+  }
+  .Green {
+    background: #9fffc7 !important;
+    &--secondary {
+      background: #d7ffc0 !important;
+    }
+  }
+  .Blue {
+    background: #9fa6ff !important;
+    &--secondary {
+      background: #c0e1ff !important;
+    }
+  }
+  .Purple {
+    background: #c49fff !important;
+    &--secondary {
+      background: #e6c0ff !important;
+    }
+  }
+}
+
+:root.dark {
+  .Red {
+    background: #380507 !important;
+    &--secondary {
+      background: #680e1a !important;
+    }
+  }
+  .Orange {
+    background: #522608 !important;
+    &--secondary {
+      background: #754211 !important;
+    }
+  }
+  .Yellow {
+    background: #382a05 !important;
+    &--secondary {
+      background: #685b0e !important;
+    }
+  }
+  .Green {
+    background: #04362a !important;
+    &--secondary {
+      background: #12443d !important;
+    }
+  }
+  .Blue {
+    background: #07083d !important;
+    &--secondary {
+      background: #2d2968 !important;
+    }
+  }
+  .Purple {
+    background: #250538 !important;
+    &--secondary {
+      background: #4f0e68 !important;
+    }
+  }
+}

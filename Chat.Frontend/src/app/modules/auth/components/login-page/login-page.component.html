@@ -1,0 +1,61 @@
+<app-header></app-header>
+
+<div class="container">
+  <form [formGroup]="form">
+    <label>
+      Username:
+      <input type="text" formControlName="username" />
+    </label>
+
+    <br />
+    <label>
+      Password:
+      <input type="password" formControlName="password" />
+    </label>
+  </form>
+
+  <button class="button button--go" [disabled]="!form.valid" (click)="login()">
+    🔑 Login
+  </button>
+  <br />
+
+  Or create new user
+  <br />
+  <br />
+
+  <form [formGroup]="newUserForm">
+    <label>
+      Username:
+      <input
+        type="text"
+        formControlName="username"
+        autocomplete="new-password"
+      />
+    </label>
+
+    <div appError *ngIf="passwordsError" class="error-message">
+      Rrror: passwords aren't the same!
+    </div>
+    <label>
+      Password:
+      <input
+        type="password"
+        id="inputId"
+        formControlName="password"
+        autocomplete="new-password"
+      />
+    </label>
+
+    <label>
+      Re-type password:
+      <input type="password" formControlName="retryPassword" />
+    </label>
+  </form>
+  <button
+    class="button button--create-new-room"
+    [disabled]="!newUserForm.valid"
+    (click)="createNewUser()"
+  >
+    🔐 Register
+  </button>
+</div>

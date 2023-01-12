@@ -1,0 +1,37 @@
+<div class="chat-box" [ngClass]="room?.color + '--secondary'">
+  <div class="messages" #messageBox (scroll)="onScroll($event)">
+    <div
+      class="messages__item"
+      *ngFor="let message of messages; index as i"
+      #lastMessage
+    >
+      <app-profile-pic
+        [username]="message.sentBy.username"
+        class="profile-pic"
+        [ngClass]="{ 'profile-pic--hidden': !hasTheSameAuthorAsLastMessage(i) }"
+      ></app-profile-pic>
+
+      <div class="chat-box-name-and-content">
+        <div *ngIf="hasTheSameAuthorAsLastMessage(i)">
+          <span class="name">{{ message.sentBy.username }}</span>
+          <span class="message-date">{{
+            message.sentDate | date : "medium"
+          }}</span>
+        </div>
+        <div class="message-content">{{ message.content }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="new-message">
+    <textarea
+      [formControl]="messageFormControl"
+      placeholder="write something..."
+      class="new-message__textarea"
+      (keyup.enter)="sendMessage()"
+      (keydown)="resize($event)"
+      pattern="\s*(\S\s*){1,}"
+    ></textarea>
+
+    <div class="icon" (click)="sendMessage()">➕</div>
+  </div>
+</div>
