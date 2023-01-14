@@ -5,9 +5,9 @@ import { Buffer } from 'buffer';
   name: 'base64Encode',
 })
 export class Base64EncodePipe implements PipeTransform {
-  transform(value: any): unknown {
+  transform(value: string): string {
     if (!value) {
-      return null;
+      return '';
     }
     return Buffer.from(value).toString('base64');
   }
