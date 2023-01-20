@@ -80,11 +80,16 @@ export class ChooseRoomComponent extends BaseComponent implements OnInit {
       password: form.value.password ?? '',
       isPrivate: form.value.isPrivate,
     };
-
     this.subscriptions$.add(
       this._roomService.UpsertRoom(request).subscribe(() => {
         this.getChatRooms();
-        form.reset();
+        this.room = {
+          id: 0,
+          name: '',
+          password: '',
+          color: 'Transparent',
+          isPrivate: false,
+        };
         this.room.color = 'Transparent';
         this._toastrService.success(
           roomId ? 'Sucessfully updated room' : 'Sucessfully added room'
